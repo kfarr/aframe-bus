@@ -23,3 +23,13 @@ Bus only:
 https://www.123rf.com/clipart-vector/bus_top_view.html?sti=lbyvx0m172ctlhijwo|&mediapopup=64825323
 
 
+168 - height in px of front from bumper to roof
+186 - height in px of right from bottom of wheels to roof
+
+ratio = 168 / 186 = 0.903225806451613
+
+height of front in m = 3.0099 * 0.903225806 = 2.7186
+and move up 0.2913m
+
+number placement:
+https://untappedcities.com/2014/02/25/cities-101-what-are-those-numbers-on-top-of-buses-for/

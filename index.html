@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene background="color: #ECECEC">
+      <a-assets>
+          <img id="bus-front" src="/bus-front.png" />
+          <img id="bus-top" src="/bus-top.png" />
+          <img id="bus-left" src="/bus-left.png" />
+          <img id="bus-right" src="/bus-right.png" />
+          <img id="bus-back" src="/bus-back.png" />
+      </a-assets>
+      <a-entity id="bus" position="0 1.5 0">
+        <a-plane src="#bus-front" id="front" material="alphaTest: 0.5" position="0 0.181 5.979" rotation="-8 0 0" width="2.59" height="2.7186" shadow></a-plane>
+        <a-plane src="#bus-top" id="top" material="alphaTest: 0.5" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow></a-plane>
+        <a-plane src="#bus-right" id="right" material="alphaTest: 0.5" position="-1.295 0 0" rotation="0 -90 0" width="12.459" height="3.001" shadow></a-plane>
+        <a-plane src="#bus-left" id="left" material="alphaTest: 0.5" position="1.295 0 0" rotation="0 90 0" width="12.459" height="3.001" shadow></a-plane>
+        <a-plane src="#bus-back" id="back" material="alphaTest: 0.5" position="0 0.181 -6.040" rotation="0 180 0" width="2.59" height="2.7186" shadow></a-plane>
+      </a-entity>
+
+      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" shadow></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
+    </a-scene>
+  </body>
+</html>
