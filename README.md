@@ -33,3 +33,13 @@ and move up 0.2913m
 
 number placement:
 https://untappedcities.com/2014/02/25/cities-101-what-are-those-numbers-on-top-of-buses-for/
+
+streetlight:
+https://poly.google.com/view/a7GJySoqzuL
+
+sky:
+https://www.flickr.com/photos/gadl/1374935110
+sky2: https://spacedock.info/mod/924/Pood%27s%20Calm%20Nebula%20Skybox
+
+lens flares:
+http://pngimg.com/imgs/nature/light/
