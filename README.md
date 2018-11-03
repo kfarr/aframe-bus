@@ -22,6 +22,9 @@ https://www.123rf.com/clipart-vector/bus_top_view.html?sti=od03in9pydp16ysu7p|&m
 Bus only:
 https://www.123rf.com/clipart-vector/bus_top_view.html?sti=lbyvx0m172ctlhijwo|&mediapopup=64825323
 
+A-Frame clock component:
+https://themarklee.com/2017/04/17/build-your-own-building-blocks-for-webvr-using-a-frame/
+
 
 168 - height in px of front from bumper to roof
 186 - height in px of right from bottom of wheels to roof
