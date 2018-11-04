@@ -1,6 +1,8 @@
 # aframe-bus
 Experiment to make a city "paper" bus in XR form
 
+Besides my code I attempted to source everything in the repo with creative commons content. Most credits and notes below, sorry if I have missed a few.
+
 “Paper bus” source texture
 http://i841.photobucket.com/albums/zz339/akamtabx36/Paperbuses/1722-3.png
 https://cptdb.ca/uploads/monthly_06_2008/post-2065-1214100948.png
@@ -46,3 +48,7 @@ sky2: https://spacedock.info/mod/924/Pood%27s%20Calm%20Nebula%20Skybox
 
 lens flares:
 http://pngimg.com/imgs/nature/light/
+
+building ideas:
+https://poly.google.com/view/c-5balfj4bu
+https://poly.google.com/view/6FQ_iKCIQd7
