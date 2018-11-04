@@ -52,3 +52,12 @@ http://pngimg.com/imgs/nature/light/
 building ideas:
 https://poly.google.com/view/c-5balfj4bu
 https://poly.google.com/view/6FQ_iKCIQd7
+
+
+bus stop: Jeremy Eyring https://poly.google.com/view/7iBPwMlmfge
+roadway: https://poly.google.com/view/dY7A5u4uuxE
+tram: https://poly.google.com/view/2cVnZdfj-Gd
+sidewalk: https://poly.google.com/view/8MDQir-qOAT
+
+additional road texture options:
+https://github.com/MicroGSD/RoadArchitect/blob/master/Materials/Textures/GSDRoad1_Diffuse.png

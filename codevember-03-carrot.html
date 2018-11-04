@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mmmm carrots! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mayognaise/aframe-gif-shader/dist/aframe-gif-shader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/feiss/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-slice9-component/dist/aframe-slice9-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-orbit-controls@1.2.0/dist/aframe-orbit-controls.min.js"></script>
+    <script>
+      AFRAME.registerComponent('clock', {
+        schema: {
+          position: {type: 'vec3', default: {x: -.75, y: 1.75, z: -1.75}},
+          color: {type: 'color', default: '#0f0'},
+          font: {type: 'string', default: 'monoid'}
+        },
+        init: function () {
+          this.clockEl = document.createElement('a-text');
+          this.el.appendChild(this.clockEl);
+          this.clockEl.setAttribute('position', this.data.position);
+          this.clockEl.setAttribute('color', this.data.color);
+          this.clockEl.setAttribute('font', this.data.font);
+        },
+        tick: function(){
+          this.clockEl.setAttribute('value', this.getTime());
+        },
+        getTime: function() {
+        		var d = new Date();
+        		return d.toLocaleTimeString();
+      	}
+      });
+  </script>
+
+  </head>
+  <body>
+    <a-scene stats orbit-controls="target: 0 1.6 -0.5; minDistance: 0.5; maxDistance: 180; initialPosition: 3 3 15" background="color: #ECECEC">
+      <a-entity environment="preset: starry;
+                       ground: canyon;
+                       groundYScale: 5;
+                       groundTexture: squares;
+                       groundColor: #606060;
+                       groundColor2: #505050;
+                       dressing:none;
+                       dressingAmount: 400;
+                       dressingColor: #477a49;
+                       grid: none;
+                       shadow: false;
+                       fog: 0;
+                       lighting: none;
+                       lightPosition: 0 0.01 -0.46" scale="2 2 2">
+</a-entity>
+      <a-assets>
+          <img id="destination-queens" src="images/Q9ALimitedOrangeLED.gif" />
+          <img id="sky" src="images/sky3.jpg" />
+      </a-assets>
+      <a-entity light="intensity:0.6;castShadow:true" position="-0.5 1 1"></a-entity>
+
+      <a-entity id="bus" rotation="0 180 0" position="0 1.5 0">
+        <a-plane src="url(images/bus-front.png)" id="front" material="alphaTest: 0.5;" position="0 0.181 5.979" rotation="-8 0 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
+        <a-plane src="url(images/bus-top.png)" id="top" material="alphaTest: 0.5;" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow="receive:false"></a-plane>
+        <a-plane src="url(images/bus-right.png)" id="right" material="alphaTest: 0.5;" position="-1.295 0 0" rotation="0 -90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
+        <a-plane src="url(images/bus-left.png)" id="left" material="alphaTest: 0.5;" position="1.295 0 0" rotation="0 90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
+        <a-plane src="url(images/bus-back.png)" id="back" material="alphaTest: 0.5;" position="0 0.181 -6.040" rotation="0 180 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
+        <a-plane src="url(images/bus-shadow.png)" id="shadow" material="alphaTest: 0.5;transparent:true;metalness:1;roughness:1;" position="0 -1.489 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" scale="1.2 1.2 0"></a-plane>
+
+        <a-plane id="led-front" position="0 1.23 5.84" rotation="-7.2 0 0" height="0.19" width="1.66" material="shader:gif;src:#destination-queens;"></a-plane>
+        <a-plane id="led-side" position="-1.3 0.98 3.75" rotation="0 -90 0" height="0.15" width="1.32" material="shader:gif;src:#destination-queens;"></a-plane>
+
+        <a-image src="url(images/light_PNG14436.png)" id="hlbeam1" material="alphaTest:0" position="1.08 -0.72 6.18" scale="1.5 1.5 0"></a-image>
+
+        <a-image src="url(images/light_PNG14436.png)" id="hlbeam2" material="alphaTest:0" position="-1.11 -0.72 6.18" scale="1.5 1.5 0"></a-image>
+
+        <a-image src="url(images/tail-light.png)" id="tlbeam1" position="1.07 -0.16 -6.06" rotation="0 180 0" scale="2 2 0"></a-image>
+        <a-image src="url(images/tail-light.png)" id="tlbeam2" position="-1.08 -0.16 -6.06" rotation="0 180 0" scale="2 2 0"></a-image>
+        <a-text position="-0.44 1.34 -6.06" value="Q9A" color="#ffbf00" text="font:dejavu" rotation="0 180 0" scale="0.9 0.9 0.9"></a-text>
+      </a-entity>
+
+      <a-entity slice9="width: 2; height: 1; left: 20; right: 43; top: 20; bottom: 43; src: images/tooltip.png" position="0 1 -2"></a-entity>
+
+      <a-entity id="streetlight" gltf-model="models/streetlightmodel.gltf" position="-6.2 -1.9 8.2" rotation="0 180 0" scale="1.5 1.5 1.5"></a-entity>
+      <a-entity id="light-streetlight" light="type:spot;angle:57.85;penumbra:0.19" position="-4.5 4.5 7" rotation="-90 0 0"></a-entity>
+
+      <a-entity id="nextbus-pole" gltf-model="models/streetlightmodel.gltf" position="4.5 -1.9 3.4" scale="1.5 1.5 1.5"></a-entity>
+      <a-entity id="nextbus-sign" material="color:black" geometry="depth:0.33;width:3.54" position="1.961 4.160 4.66" ></a-entity>
+
+      <a-entity id="sidewalk" geometry="primitive:plane;height:10;width:30" position="7.72 0.26 0" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:18 6;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
+
+      <a-entity id="busstop" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="5.5 0.25 9.5" rotation="-90 0 0" scale="0.001 0.001 0.001"></a-entity>
+      <a-entity geometry="primitive:plane;height:2.5;width:2" position="4.74 1.53 11.57" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
+
+      <a-entity id="street1" position="2.2 0.25 0" rotation="90 0 0" scale="0.5 0.5 0.5">
+        <a-entity gltf-model="models/street-7aKNh-4MGdK/scene.gltf" scale="0.001 0.001 0.001"></a-entity>
+      </a-entity>
+
+      <a-entity clock="font: sourcecodepro; color: #ffbf00; position: 0.381 4.03 4.859"></a-entity>
+      <a-text position="0.381 4.36 4.859" value="Howard St Closed at 3rd" color="#ffbf00" font="monoid"></a-text>
+
+      <a-entity id="light-busright" light="type:spot;angle:57.85;penumbra:0.19;color:#ff0c00;" position="-1.1 0.7 6.02" rotation="0 180 0" ></a-entity>
+      <a-entity id="light-busright" light="type:spot;angle:57.85;penumbra:0.19;color:#ff0c00;" position="1.1 0.7 6.02" rotation="0 180 0" ></a-entity>
+      <a-entity id="ambient" light="color:#BBB;type:ambient;intensity:0.1"></a-entity>
+    </a-scene>
+  </body>
+</html>
