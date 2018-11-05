@@ -24,9 +24,14 @@
           this.clockEl.setAttribute('position', this.data.position);
           this.clockEl.setAttribute('color', this.data.color);
           this.clockEl.setAttribute('font', this.data.font);
+          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, 1000, this);
+
+        },
+        everySecond: function () {
+          this.clockEl.setAttribute('value', this.getTime());
         },
         tick: function(){
-          this.clockEl.setAttribute('value', this.getTime());
+          this.throttledFunction();  // Called once a second.
         },
         getTime: function() {
         		var d = new Date();
