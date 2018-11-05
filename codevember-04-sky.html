@@ -119,7 +119,7 @@
 
   </head>
   <body>
-    <a-scene stats orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 10 0" background="color: #ECECEC">
+    <a-scene orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 10 0" background="color: #ECECEC">
       <a-entity environment="preset: starry;
                        ground: canyon;
                        groundYScale: 5;
@@ -140,7 +140,7 @@
           <img id="sky" src="images/sky3.jpg" />
           <script id="bustemplate" type="text/html">
             <a-plane class="bus-front" src="url(images/bus-front.png)" material="alphaTest: 0.5;" position="0 0.181 5.979" rotation="-8 0 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
-            <a-plane class="bus-top" src="url(images/bus-top.png)" material="alphaTest: 0.5;" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow="receive:false"></a-plane>
+            <a-plane class="bus-top" src="url(images/${topurl}.png)" material="alphaTest: 0.5;" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow="receive:false"></a-plane>
             <a-plane class="bus-right" src="url(images/bus-right.png)" material="alphaTest: 0.5;" position="-1.295 0 0" rotation="0 -90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
             <a-plane class="bus-left" src="url(images/bus-left.png)"  material="alphaTest: 0.5;" position="1.295 0 0" rotation="0 90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
             <a-plane class="bus-back" src="url(images/bus-back.png)" material="alphaTest: 0.5;" position="0 0.181 -6.040" rotation="0 180 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
@@ -165,18 +165,18 @@
 
       </a-assets>
 
-      <a-entity id="bus" template="src: #bustemplate" position="0 1.5 0" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity>
-      <a-entity id="bus2" template="src: #bustemplate" position="-6.3 1.5 0" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity>
+      <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity>
+      <a-entity id="bus2" template="src: #bustemplate" data-topurl="bus-top" position="-6.3 1.5 0" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity>
 
-      <a-entity id="bus3" template="src: #bustemplate" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity>
-      <a-entity id="bus4" template="src: #bustemplate" position="-6.3 1.5 40" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity>
+      <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity>
+      <!-- <a-entity id="bus4" template="src: #bustemplate" position="-6.3 1.5 40" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity> -->
 
       <!-- <a-entity slice9="width: 2; height: 1; left: 20; right: 43; top: 20; bottom: 43; src: images/tooltip.png" position="0 1 -2"></a-entity> -->
 
       <a-entity id="model-streetlight" gltf-model="models/streetlightmodel.gltf" position="-3.6 -1.9 8.2" rotation="0 180 0" scale="1.5 1.5 1.5"></a-entity>
       <a-entity id="light-streetlight" light="type:spot;angle:57.85;penumbra:0.19" position="-3 4.5 7" rotation="-90 0 0"></a-entity>
 
-      <a-entity id="messageboard">
+      <a-entity id="messageboard" position="0 0 -12">
         <a-entity id="messageboard-pole" gltf-model="models/streetlightmodel.gltf" position="4.5 -1.9 3.4" scale="1.5 1.5 1.5"></a-entity>
         <a-entity id="messageboard-sign" material="color:black" geometry="depth:0.33;width:3.54" position="1.961 4.160 4.66" ></a-entity>
         <a-entity clock="font: sourcecodepro; color: #ffbf00; position: 0.381 4.03 4.859"></a-entity>
