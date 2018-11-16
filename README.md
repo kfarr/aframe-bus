@@ -1,17 +1,59 @@
 # aframe-bus
 Experiment to make a city "paper" bus in XR form
 
-Besides my code I attempted to source everything in the repo with creative commons content. Most credits and notes below, sorry if I have missed a few.
+## 07-sea notes
+* sea 10m below roadway (y = -10)
+* remove other background / environment?
+* superhands
+* grabbable - see sticky example
+* turn off velocity - velocity 0 ?
+* 1:43 scale to match MTA toy bus
+* then try puttin it all together
+* entity reparenting / grabber
 
-“Paper bus” source texture
-http://i841.photobucket.com/albums/zz339/akamtabx36/Paperbuses/1722-3.png
-https://cptdb.ca/uploads/monthly_06_2008/post-2065-1214100948.png
+## Bus Dimensions
 
 Orion Model VII NG
 https://cptdb.ca/wiki/index.php/Orion_International_%27Orion_VII%27
 Length 40' 10.5" = 12.459m
 Width: 102" = 2.59 m
 Height: 118.5” = 3.0099m (not including HVAC or battery, otherwise 132” or 335.28m for full HEV )
+
+168 - height in px of front from bumper to roof
+186 - height in px of right from bottom of wheels to roof
+
+ratio = 168 / 186 = 0.903225806451613
+
+height of front in m = 3.0099 * 0.903225806 = 2.7186
+and move up 0.2913m
+
+1:43 scale NYC MTA Bus Toy:
+https://www.amazon.com/Daron-RT8468-MTA-11-Bus/dp/B00EVQJ5I2
+
+
+
+## Credits
+
+Besides my code I attempted to source everything in the repo with creative commons content. Most credits and notes below, sorry if I have missed a few.
+
+trees:
+https://poly.google.com/view/2y-Cl3E7lMf
+https://poly.google.com/view/8ICCdgc7CQd
+
+island:
+https://poly.google.com/view/eEz9hdknXOi
+
+grass:
+https://opengameart.org/content/3-seamless-grass-textures
+
+fence:
+https://poly.google.com/view/8ySm0IGHA5W
+
+“Paper bus” source texture
+http://i841.photobucket.com/albums/zz339/akamtabx36/Paperbuses/1722-3.png
+https://cptdb.ca/uploads/monthly_06_2008/post-2065-1214100948.png
+
+
 
 LED signs:
 https://www.nyctransitforums.com/topic/13822-animated-luminator-bus-signs/?page=17
@@ -26,15 +68,6 @@ https://www.123rf.com/clipart-vector/bus_top_view.html?sti=lbyvx0m172ctlhijwo|&m
 
 A-Frame clock component:
 https://themarklee.com/2017/04/17/build-your-own-building-blocks-for-webvr-using-a-frame/
-
-
-168 - height in px of front from bumper to roof
-186 - height in px of right from bottom of wheels to roof
-
-ratio = 168 / 186 = 0.903225806451613
-
-height of front in m = 3.0099 * 0.903225806 = 2.7186
-and move up 0.2913m
 
 number placement:
 https://untappedcities.com/2014/02/25/cities-101-what-are-those-numbers-on-top-of-buses-for/
@@ -52,7 +85,6 @@ http://pngimg.com/imgs/nature/light/
 building ideas:
 https://poly.google.com/view/c-5balfj4bu
 https://poly.google.com/view/6FQ_iKCIQd7
-
 
 bus stop: Jeremy Eyring https://poly.google.com/view/7iBPwMlmfge
 roadway: https://poly.google.com/view/dY7A5u4uuxE
