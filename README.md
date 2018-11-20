@@ -1,6 +1,8 @@
 # aframe-bus
 Experiment to make a city "paper" bus in XR form
 
+## 09-green notes
+
 ## 07-sea notes
 * sea 10m below roadway (y = -10)
 * remove other background / environment?
@@ -78,6 +80,10 @@ https://poly.google.com/view/a7GJySoqzuL
 sky:
 https://www.flickr.com/photos/gadl/1374935110
 sky2: https://spacedock.info/mod/924/Pood%27s%20Calm%20Nebula%20Skybox
+
+ocean:
+sky for environment map: https://www.cgskies.com/sky.php?sky=343
+water normals: https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/waternormals.jpg
 
 lens flares:
 http://pngimg.com/imgs/nature/light/
