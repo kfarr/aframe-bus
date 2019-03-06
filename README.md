@@ -1,8 +1,6 @@
 # aframe-bus
 Experiment to make a city "paper" bus in XR form
 
-## 09-green notes
-
 ## 07-sea notes
 * sea 10m below roadway (y = -10)
 * remove other background / environment?
@@ -13,13 +11,23 @@ Experiment to make a city "paper" bus in XR form
 * then try puttin it all together
 * entity reparenting / grabber
 
-## Bus Dimensions
+## Real Life Bus Dimensions
 
-Orion Model VII NG
+Orion Model VII Next Generation
 https://cptdb.ca/wiki/index.php/Orion_International_%27Orion_VII%27
+https://en.wikipedia.org/wiki/MTA_Regional_Bus_Operations_bus_fleet (search "Orion VII
+Next Generation" for pictures)
+
 Length 40' 10.5" = 12.459m
+
 Width: 102" = 2.59 m
+
 Height: 118.5” = 3.0099m (not including HVAC or battery, otherwise 132” or 335.28m for full HEV )
+
+1:43 scale NYC MTA Bus Toy:
+https://www.amazon.com/Daron-RT8468-MTA-11-Bus/dp/B00EVQJ5I2
+
+## "Paper" Model Bus Dimensions
 
 168 - height in px of front from bumper to roof
 186 - height in px of right from bottom of wheels to roof
@@ -28,9 +36,6 @@ ratio = 168 / 186 = 0.903225806451613
 
 height of front in m = 3.0099 * 0.903225806 = 2.7186
 and move up 0.2913m
-
-1:43 scale NYC MTA Bus Toy:
-https://www.amazon.com/Daron-RT8468-MTA-11-Bus/dp/B00EVQJ5I2
 
 
 
