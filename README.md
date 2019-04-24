@@ -4,12 +4,12 @@ Experiment to make a city "paper" bus in XR form
 Inspired by #Codevember 2018
 
 ## Quick links
-https://kfarr.github.io/aframe-bus/codevember-02-time.html
-https://kfarr.github.io/aframe-bus/codevember-03-carrot.html
-https://kfarr.github.io/aframe-bus/codevember-04-sky.html
-https://kfarr.github.io/aframe-bus/codevember-07-sea.html
-https://kfarr.github.io/aframe-bus/codevember-09-green.html
-https://kfarr.github.io/aframe-bus/codevember-15-fire.html
+* https://kfarr.github.io/aframe-bus/codevember-02-time.html
+* https://kfarr.github.io/aframe-bus/codevember-03-carrot.html
+* https://kfarr.github.io/aframe-bus/codevember-04-sky.html
+* https://kfarr.github.io/aframe-bus/codevember-07-sea.html
+* https://kfarr.github.io/aframe-bus/codevember-09-green.html
+* https://kfarr.github.io/aframe-bus/codevember-15-fire.html
 
 ## 07-sea notes
 * sea 10m below roadway (y = -10)
