@@ -4,12 +4,15 @@
     <meta charset="utf-8">
     <title>View from the Sky • A-Frame</title>
     <meta name="description" content="Hello, WebVR! • A-Frame">
-    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mayognaise/aframe-gif-shader/dist/aframe-gif-shader.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/feiss/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-slice9-component/dist/aframe-slice9-component.min.js"></script>
     <script src="https://unpkg.com/aframe-orbit-controls@1.2.0/dist/aframe-orbit-controls.min.js"></script>
     <script src="https://unpkg.com/aframe-template-component@^3.1.1/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-log-component/dist/aframe-log-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+
 
     <script>
       AFRAME.registerComponent('position-log', {
@@ -26,22 +29,23 @@
         },
         everySecond: function() {
 
-          console.log("*******\nCurrent position");
-          console.log(this.el.object3D.position);
+          AFRAME.log("******* POSITION, VELOCITY, SPEED LOG *******\nCurrent position");
+          // console.log(this.el.object3D.position);
+          AFRAME.log(this.el.object3D.position);
 
-          console.log("Previous position");
-          console.log(this.lastPosition);
+          AFRAME.log("Previous position");
+          AFRAME.log(this.lastPosition);
 
-          console.log("Velocity");
+          AFRAME.log("Velocity");
           this.velocity.subVectors(this.el.object3D.position, this.lastPosition);
-          console.log(this.velocity);
+          AFRAME.log(this.velocity);
 
-          console.log("Speed");
+          AFRAME.log("Speed via Math");
           this.speed = Math.sqrt(Math.pow(this.velocity.getComponent(0), 2) + Math.pow(this.velocity.getComponent(1), 2) + Math.pow(this.velocity.getComponent(2), 2));
-          console.log(this.speed);
+          AFRAME.log(this.speed);
 
-          console.log("Velocity Vector Length");
-          console.log(this.velocity.length());
+          AFRAME.log("Speed via Vector Length");
+          AFRAME.log(this.velocity.length());
 
           this.lastPosition.copy(this.el.object3D.position);
 
@@ -50,6 +54,14 @@
           this.throttledFunction();  // Called once a second.
         },
       });
+
+      // hack for orbit-controls and look-at component to play nicely together https://github.com/supermedium/superframe/issues/200
+      AFRAME.registerComponent('orbit-look-at-hack', {
+        tick: function () {
+          lookCubeHack.setAttribute('position', mainCamHack.getObject3D('camera').position);
+        }
+      });
+
 
       AFRAME.registerComponent('clock', {
         schema: {
@@ -111,7 +123,10 @@
 
   </head>
   <body>
-    <a-scene orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 10 0" background="color: #ECECEC">
+    <a-scene background="color: #ECECEC">
+      <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 10 0"> </a-entity>
+      <a-entity id="lookCubeHack" orbit-look-at-hack geometry="" static-body="shape: box" position="0 0 0" scale="1 1 1"></a-entity>
+
       <a-entity environment="preset: starry;
                        ground: canyon;
                        groundYScale: 5;
@@ -157,8 +172,18 @@
 
       </a-assets>
 
+      <a-entity position-log wasd-controls="wsInverted: true; adInverted: true; acceleration: 130;">
+        <a-entity id="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="0 3 0"></a-entity>
+
+        <a-entity id="bus2" template="src: #bustemplate" data-topurl="bus-top" position="-6.3 1.5 0" rotation="0 0 0"  >
+
+      </a-entity>
       <!-- <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
-      <a-entity id="bus2" position-log template="src: #bustemplate" data-topurl="bus-top" position="-6.3 1.5 0" rotation="0 0 0" wasd-controls="wsInverted: true; adInverted: true;" ></a-entity>
+        <!-- <a-entity scale="5 5 5" id="bus2log" log="channel: foo" geometry="primitive: plane"></a-entity> -->
+
+      </a-entity>
+
+
 
       <!-- <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
       <!-- <a-entity id="bus4" template="src: #bustemplate" position="-6.3 1.5 40" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity> -->
