@@ -124,7 +124,7 @@
   </head>
   <body>
     <a-scene background="color: #ECECEC">
-      <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 10 0"> </a-entity>
+      <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 28 0"> </a-entity>
       <a-entity id="lookCubeHack" orbit-look-at-hack geometry="" static-body="shape: box" position="0 0 0" scale="1 1 1"></a-entity>
 
       <a-entity environment="preset: starry;
@@ -174,11 +174,14 @@
 
       </a-assets>
 
-      <a-entity position-log wasd-controls="wsInverted: true; adInverted: true; acceleration: 130;">
-        <a-entity id="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="0 3 0"></a-entity>
+      <a-entity position-log wasd-controls="acceleration: 260;" position="0 0 10">
+        <a-entity id="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="6 3 0"></a-entity>
 
-        <a-entity id="bus2" template="src: #bustemplate" data-topurl="bus-top" position="-6.3 1.5 0" rotation="0 0 0"  >
+        <!-- <a-entity id="bus2" template="src: #bustemplate" data-topurl="bus-top" position="-6.3 1.5 0" rotation="0 0 0"  > -->
           <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
+          <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" ></a-entity>
+
+          <!-- <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
 
       </a-entity>
       <!-- <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
@@ -203,10 +206,11 @@
         <a-text position="0.381 4.36 4.859" value="Howard St Closed at 3rd" color="#ffbf00" font="monoid"></a-text>
       </a-entity>
 
-      <a-entity id="sidewalk" geometry="primitive:plane;height:10;width:30" position="7.72 0.26 0" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:18 6;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
+      <!-- <a-entity id="sidewalk" geometry="primitive:plane;height:10;width:30" position="7.72 0.26 0" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:18 6;color:#f4fff7;metalness:1;roughness:0.84"></a-entity> -->
+      <a-entity id="sidewalk" geometry="primitive:plane;height:5;width:15" position="6 0.26 28" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
 
-      <a-entity id="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="5.5 0.25 9.5" rotation="-90 0 0" scale="0.001 0.001 0.001"></a-entity>
-      <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="4.74 1.53 11.57" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
+      <a-entity id="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="5.5 0.25 25" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
+      <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="4.74 1.53 27.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
 
       <a-entity id="lane-northbound">
         <a-entity id="street1" position="2.2 0.25 0" rotation="90 0 0" scale="0.5 0.5 0.5">
