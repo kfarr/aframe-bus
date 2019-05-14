@@ -207,10 +207,33 @@
       </a-entity>
 
       <!-- <a-entity id="sidewalk" geometry="primitive:plane;height:10;width:30" position="7.72 0.26 0" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:18 6;color:#f4fff7;metalness:1;roughness:0.84"></a-entity> -->
-      <a-entity id="sidewalk" geometry="primitive:plane;height:5;width:15" position="6 0.26 28" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
+      <a-entity id="bus-stop-a" position="4.5 0 25">
+        <a-entity id="bus-stop-sidewalk" geometry="primitive:plane;height:5;width:15" position="1.5 0.26 3" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
 
-      <a-entity id="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="5.5 0.25 25" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
-      <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="4.74 1.53 27.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
+        <a-entity id="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
+        <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
+
+        <!-- <a-ring id="mark" position="0 0.5 0" scale="100 100 100" material="shader:flat" color="yellow" rotation="-90 0 0" radius-inner="0.01" radius-outer="0.02" animation="property: scale; from: 100 100 100; to: 200 200 200; dir: alternate; dur: 1000; loop: true"> -->
+          <a-ring color="yellow" position="0 0.5 0"
+          animation__1="property: radius-inner; from: 3; to: 7; dir: alternate; dur: 1000; loop: true"
+          animation__2="property: radius-outer; from: 4; to: 8; dir: alternate; dur: 1000; loop: true"
+
+          rotation="-90 0 0" material="shader:flat" radius-inner="3" radius-outer="4" >
+          </a-ring>
+          <!-- <a-ring color="yellow" material="shader:flat" radius-inner="0.05" radius-outer="0.06">
+          <a-animation
+              attribute="scale"
+              from="1 1 1"
+              to="3 3 3"
+              direction="alternate"
+              dur="1000"
+              repeat="indefinite"></a-animation>
+          </a-ring> -->
+        <!-- </a-ring> -->
+
+      </a-entity>
+
+
 
       <a-entity id="lane-northbound">
         <a-entity id="street1" position="2.2 0.25 0" rotation="90 0 0" scale="0.5 0.5 0.5">
