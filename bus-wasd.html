@@ -123,18 +123,17 @@
 
   </head>
   <body>
-    <a-scene background="color: #ECECEC">
+    <a-scene stats background="color: #ECECEC">
       <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 28 0"> </a-entity>
       <a-entity id="lookCubeHack" orbit-look-at-hack geometry="" static-body="shape: box" position="0 0 0" scale="1 1 1"></a-entity>
 
       <a-entity environment="preset: starry;
                        ground: canyon;
-                       groundYScale: 5;
+                       groundYScale: 4;
                        groundTexture: squares;
                        groundColor: #606060;
                        groundColor2: #505050;
                        dressing:none;
-                       dressingAmount: 400;
                        dressingColor: #477a49;
                        grid: none;
                        shadow: false;
@@ -207,11 +206,31 @@
       </a-entity>
 
       <!-- <a-entity id="sidewalk" geometry="primitive:plane;height:10;width:30" position="7.72 0.26 0" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:18 6;color:#f4fff7;metalness:1;roughness:0.84"></a-entity> -->
-      <a-entity id="bus-stop-a" position="4.5 0 25">
+      <a-entity class="bus-stop" id="bus-stop-1" position="4.5 0 25">
+
+        <a-entity class="minis">
+          <a-obj-model
+            id="bob"
+            animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
+            animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
+            position="0 0.2 0" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker1.obj" mtl="models/city-builder-obj/chr_worker1.mtl"></a-obj-model>
+          <a-obj-model
+            id="roberta"
+            animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
+            animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
+            position="0 0.2 1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker2.obj" mtl="models/city-builder-obj/chr_worker2.mtl"></a-obj-model>
+          <a-obj-model
+            id="tom"
+            animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
+            animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
+            position="0 0.2 -1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker3.obj" mtl="models/city-builder-obj/chr_worker3.mtl"></a-obj-model>
+
+
+        </a-entity>
+
         <a-entity id="bus-stop-sidewalk" geometry="primitive:plane;height:5;width:15" position="1.5 0.26 3" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
 
         <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.3 3" scale="6 8 6"></a-image>
-
 
         <a-entity id="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
         <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
