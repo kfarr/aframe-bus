@@ -12,27 +12,72 @@
     <script src="https://unpkg.com/aframe-template-component@^3.1.1/dist/aframe-template-component.min.js"></script>
     <script src="https://unpkg.com/aframe-log-component/dist/aframe-log-component.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-state-component@6.6.0/dist/aframe-state-component.min.js"></script>
+
     <script src="forward.js"></script>
     <script src="clock.js"></script>
 
     <script>
+
+      AFRAME.registerState({
+        initialState: {
+          busPeeps: 0,
+          stopPeeps: 3
+        },
+
+        handlers: {
+          decreaseBusPeeps: function (state, action) {
+            state.busPeeps -= 1;
+          },
+
+          increaseBusPeeps: function (state, action) {
+            state.busPeeps += 1;
+          },
+
+          decreaseStopPeeps: function (state, action) {
+            state.stopPeeps -= 1;
+          },
+
+          increaseStopPeeps: function (state, action) {
+            state.increaseStopPeeps += 1;
+          }
+
+        }
+      });
 
       // passengers board the bus if bus is within threshold distance of busstop
       AFRAME.registerComponent('board', {
         schema: {
           delay: {type: 'number', default: 1000},
           target: {type: 'string', default: "bus-stop"},
-          distance: {type: 'number', default: 2},
+          distance: {type: 'number', default: 4},
           capacity: {type: 'number', default: 4}
         },
         init: function () {
           this.throttledFunction = AFRAME.utils.throttle(this.everySecond, 1000, this);
+          this.comparisonVector = new THREE.Vector3();
+          this.positionDelta = Number(this.data.distance) + 1;
+          this.targetEl = document.querySelector("#" + this.data.target);
+          this.positionThis = new THREE.Vector3();
+          this.positionTarget = new THREE.Vector3();
         },
         everySecond: function() {
           // if distance between this element and the target element are less than distance
           // if current passengers is less than capacity
           // subtract 1 passenger from target bus stop
           // add 1 passenger to bus
+         console.log(this.el.object3D.getWorldPosition(this.positionThis));
+         console.log(this.targetEl.object3D.getWorldPosition(this.positionTarget));
+
+          this.comparisonVector.subVectors(this.positionThis, this.positionTarget);
+          this.positionDelta = this.comparisonVector.length();
+         console.log(this.positionDelta);
+
+          if (this.positionDelta < Number(this.data.distance)) {
+            AFRAME.scenes[0].emit('increaseBusPeeps');
+            AFRAME.scenes[0].emit('decreaseStopPeeps');
+           console.log("1 PEEPS BOARDED");
+          }
         },
         tick: function(){
           this.throttledFunction();  // Called once a second.
@@ -56,26 +101,21 @@
         },
         everySecond: function() {
 
-          AFRAME.log("******* POSITION CONSOLE LOG *******\nCurrent Position");
+          AFRAME.log("******* ENTITY CONSOLE LOG *******\nCurrent Position");
           AFRAME.log(this.el.object3D.position);
-
           // AFRAME.log("Previous Position");
           // AFRAME.log(this.lastPosition);
-
           AFRAME.log("Velocity (m/s)");
           this.velocity.subVectors(this.el.object3D.position, this.lastPosition);
           AFRAME.log(this.velocity);
-          AFRAME.log("Speed (m/s)");
+
           this.speed = this.velocity.length()
-          AFRAME.log(this.speed);
-
-          AFRAME.log("Acceleration (m/s^2)");
+          AFRAME.log("Speed: " + this.speed + " m/s");
           this.acceleration = this.speed - this.lastSpeed;
-          AFRAME.log(this.acceleration);
+          AFRAME.log("Acceleration: " + this.acceleration + " m/s^2");
 
-          AFRAME.log("Passengers");
-          AFRAME.log(this.passengers);
-          // AFRAME.log(" [XX] [XX] [XX] [XX] [XX]");
+          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.busPeeps);
+
 
           // AFRAME.log("Speed via Math");
           // this.speed = Math.sqrt(Math.pow(this.velocity.getComponent(0), 2) + Math.pow(this.velocity.getComponent(1), 2) + Math.pow(this.velocity.getComponent(2), 2));
@@ -151,12 +191,12 @@
 
       </a-assets>
 
-      <a-entity position-log wasd-controls="acceleration: 260;" position="0 0 10">
+      <a-entity id="bus" position-log board="target: bus-stop-1-marker" wasd-controls="acceleration: 260;" position="0 0 10">
         <a-entity id="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="6 3 0"></a-entity>
 
         <!-- <a-entity id="bus2" template="src: #bustemplate" data-topurl="bus-top" position="-6.3 1.5 0" rotation="0 0 0"  > -->
           <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
-          <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" ></a-entity>
+          <a-entity id="bus-model" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" ></a-entity>
 
           <!-- <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
 
@@ -183,6 +223,10 @@
 
       <!-- <a-entity id="sidewalk" geometry="primitive:plane;height:10;width:30" position="7.72 0.26 0" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:18 6;color:#f4fff7;metalness:1;roughness:0.84"></a-entity> -->
       <a-entity class="bus-stop" id="bus-stop-1" position="4.5 0 25">
+        <!-- <a-entity text="value: 0" position="0 10 0" scale="5 5 5"></a-entity> -->
+
+        <a-text id="peepStopLabel" position="0 7 0" rotation="0 180 0" scale="10 10 10" bind__value="stopPeeps" color="#ffbf00" font="monoid"></a-text>
+
 
         <a-entity class="minis">
           <a-obj-model
@@ -212,7 +256,7 @@
         <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
 
         <!-- <a-ring id="mark" position="0 0.5 0" scale="100 100 100" material="shader:flat" color="yellow" rotation="-90 0 0" radius-inner="0.01" radius-outer="0.02" animation="property: scale; from: 100 100 100; to: 200 200 200; dir: alternate; dur: 1000; loop: true"> -->
-          <a-ring color="yellow" position="0 0.5 0"
+          <a-ring id="bus-stop-1-marker" color="yellow" position="-4.44 0.5 -1.79"
           animation__1="property: radius-inner; from: 3; to: 7; dir: alternate; dur: 1000; loop: true"
           animation__2="property: radius-outer; from: 4; to: 8; dir: alternate; dur: 1000; loop: true"
 
