@@ -12,9 +12,33 @@
     <script src="https://unpkg.com/aframe-template-component@^3.1.1/dist/aframe-template-component.min.js"></script>
     <script src="https://unpkg.com/aframe-log-component/dist/aframe-log-component.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-
+    <script src="forward.js"></script>
+    <script src="clock.js"></script>
 
     <script>
+
+      // passengers board the bus if bus is within threshold distance of busstop
+      AFRAME.registerComponent('board', {
+        schema: {
+          delay: {type: 'number', default: 1000},
+          target: {type: 'string', default: "bus-stop"},
+          distance: {type: 'number', default: 2},
+          capacity: {type: 'number', default: 4}
+        },
+        init: function () {
+          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, 1000, this);
+        },
+        everySecond: function() {
+          // if distance between this element and the target element are less than distance
+          // if current passengers is less than capacity
+          // subtract 1 passenger from target bus stop
+          // add 1 passenger to bus
+        },
+        tick: function(){
+          this.throttledFunction();  // Called once a second.
+        },
+      });
+
       AFRAME.registerComponent('position-log', {
         schema: {
 
@@ -25,29 +49,40 @@
           this.lastPosition = new THREE.Vector3();
           this.lastPosition.copy(this.el.object3D.position);
           this.velocity = new THREE.Vector3();
-          this.speed = new Number;
+          this.speed = 0;
+          this.lastSpeed = 0;
+          this.passengers = 0;
+          this.acceleration = 0;
         },
         everySecond: function() {
 
-          AFRAME.log("******* POSITION, VELOCITY, SPEED LOG *******\nCurrent position");
-          // console.log(this.el.object3D.position);
+          AFRAME.log("******* POSITION CONSOLE LOG *******\nCurrent Position");
           AFRAME.log(this.el.object3D.position);
 
-          AFRAME.log("Previous position");
-          AFRAME.log(this.lastPosition);
+          // AFRAME.log("Previous Position");
+          // AFRAME.log(this.lastPosition);
 
-          AFRAME.log("Velocity");
+          AFRAME.log("Velocity (m/s)");
           this.velocity.subVectors(this.el.object3D.position, this.lastPosition);
           AFRAME.log(this.velocity);
-
-          AFRAME.log("Speed via Math");
-          this.speed = Math.sqrt(Math.pow(this.velocity.getComponent(0), 2) + Math.pow(this.velocity.getComponent(1), 2) + Math.pow(this.velocity.getComponent(2), 2));
+          AFRAME.log("Speed (m/s)");
+          this.speed = this.velocity.length()
           AFRAME.log(this.speed);
 
-          AFRAME.log("Speed via Vector Length");
-          AFRAME.log(this.velocity.length());
+          AFRAME.log("Acceleration (m/s^2)");
+          this.acceleration = this.speed - this.lastSpeed;
+          AFRAME.log(this.acceleration);
+
+          AFRAME.log("Passengers");
+          AFRAME.log(this.passengers);
+          // AFRAME.log(" [XX] [XX] [XX] [XX] [XX]");
+
+          // AFRAME.log("Speed via Math");
+          // this.speed = Math.sqrt(Math.pow(this.velocity.getComponent(0), 2) + Math.pow(this.velocity.getComponent(1), 2) + Math.pow(this.velocity.getComponent(2), 2));
+          // AFRAME.log(this.speed);
 
           this.lastPosition.copy(this.el.object3D.position);
+          this.lastSpeed = this.speed;
 
         },
         tick: function(){
@@ -61,63 +96,6 @@
           lookCubeHack.setAttribute('position', mainCamHack.getObject3D('camera').position);
         }
       });
-
-
-      AFRAME.registerComponent('clock', {
-        schema: {
-          position: {type: 'vec3', default: {x: -.75, y: 1.75, z: -1.75}},
-          color: {type: 'color', default: '#0f0'},
-          font: {type: 'string', default: 'monoid'}
-        },
-        init: function () {
-          this.clockEl = document.createElement('a-text');
-          this.el.appendChild(this.clockEl);
-          this.clockEl.setAttribute('position', this.data.position);
-          this.clockEl.setAttribute('color', this.data.color);
-          this.clockEl.setAttribute('font', this.data.font);
-          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, 1000, this);
-
-        },
-        everySecond: function () {
-          this.clockEl.setAttribute('value', this.getTime());
-        },
-        tick: function(){
-          this.throttledFunction();  // Called once a second.
-        },
-        getTime: function() {
-        		var d = new Date();
-        		return d.toLocaleTimeString();
-      	}
-      });
-
-      // source: https://github.com/networked-aframe/networked-aframe/blob/master/server/static/js/forward.component.js
-      AFRAME.registerComponent('forward', {
-        schema: {
-          speed: {default: 0.1},
-        },
-
-        init: function() {
-        	var worldDirection = new THREE.Vector3();
-
-          this.el.object3D.getWorldDirection(worldDirection);
-//          worldDirection.multiplyScalar(-1);
-
-          this.worldDirection = worldDirection;
-          console.error(this.worldDirection);
-        },
-
-        tick: function() {
-        	var el = this.el;
-
-        	var currentPosition = el.getAttribute('position');
-      	  var newPosition = this.worldDirection
-      							        .clone()
-      							        .multiplyScalar(this.data.speed)
-      							        .add(currentPosition);
-      	  el.setAttribute('position', newPosition);
-        }
-      });
-
 
   </script>
 
@@ -188,8 +166,6 @@
 
       </a-entity>
 
-
-
       <!-- <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
       <!-- <a-entity id="bus4" template="src: #bustemplate" position="-6.3 1.5 40" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity> -->
 
@@ -230,7 +206,7 @@
 
         <a-entity id="bus-stop-sidewalk" geometry="primitive:plane;height:5;width:15" position="1.5 0.26 3" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
 
-        <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.3 3" scale="6 8 6"></a-image>
+        <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.02 3" scale="6 8 6"></a-image>
 
         <a-entity id="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
         <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
