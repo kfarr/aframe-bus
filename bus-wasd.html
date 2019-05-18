@@ -57,7 +57,7 @@
         schema: {
           delay: {type: 'number', default: 1000},
           target: {type: 'string', default: "bus-stop"},
-          distance: {type: 'number', default: 3},
+          distance: {type: 'number', default: 2},
           capacity: {type: 'number', default: 4},
           busPeeps: {type: 'number', default: 0},
           stopPeeps: {type: 'number', default: 0}
@@ -217,9 +217,11 @@
       </a-assets>
 
 
-      <a-entity id="bus" position-log bind__boarding="busPeeps: busPeeps; stopPeeps: stopPeeps" boarding="target: bus-stop-1-marker" wasd-controls="acceleration: 260;" position="0 0 10">
-        <a-ring id="bus-marker-door" color="cyan" position="2 0.5 -5.315"
-        rotation="-90 0 0" material="shader:flat" radius-inner="0.4" radius-outer="0.5" >
+      <a-entity id="bus" position-log wasd-controls="acceleration: 260;" position="0 0 10">
+        <a-text id="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="busPeeps" color="cyan" font="monoid"></a-text>
+
+        <a-ring id="bus-door-marker" color="cyan" position="2 0.5 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
+        bind__boarding="busPeeps: busPeeps; stopPeeps: stopPeeps" boarding="target: bus-stop-1-marker">
         </a-ring>
 
         <a-entity id="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
@@ -257,7 +259,7 @@
       <a-entity class="bus-stop" id="bus-stop-1" position="4.5 0 25">
         <!-- <a-entity text="value: 0" position="0 10 0" scale="5 5 5"></a-entity> -->
 
-        <a-text id="peepStopLabel" look-at="#lookCubeHack" position="5 7 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="#ffbf00" font="monoid"></a-text>
+        <a-text id="stopPeepLabel" look-at="#lookCubeHack" position="2 7 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="yellow" font="monoid"></a-text>
 
 
         <a-entity class="minis">
