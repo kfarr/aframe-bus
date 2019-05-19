@@ -95,6 +95,9 @@
               if (!stopEmpty) {
                 AFRAME.scenes[0].emit('increaseBusPeeps');
                 AFRAME.scenes[0].emit('decreaseStopPeeps');
+                document.querySelector("#roberta").removeAttribute("animation__board");
+                document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
+
                 console.log("1 PEEPS BOARDED");
               } else {
                 console.log("Stop Empty");
@@ -272,12 +275,12 @@
             id="roberta"
             animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
             animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
-            position="0 0.2 1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker2.obj" mtl="models/city-builder-obj/chr_worker2.mtl"></a-obj-model>
+            position="0 0.2 -1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker2.obj" mtl="models/city-builder-obj/chr_worker2.mtl"></a-obj-model>
           <a-obj-model
             id="tom"
             animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
             animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
-            position="0 0.2 -1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker3.obj" mtl="models/city-builder-obj/chr_worker3.mtl"></a-obj-model>
+            position="0 0.2 1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker3.obj" mtl="models/city-builder-obj/chr_worker3.mtl"></a-obj-model>
 
 
         </a-entity>
@@ -290,13 +293,13 @@
         <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
 
         <!-- <a-ring id="mark" position="0 0.5 0" scale="100 100 100" material="shader:flat" color="yellow" rotation="-90 0 0" radius-inner="0.01" radius-outer="0.02" animation="property: scale; from: 100 100 100; to: 200 200 200; dir: alternate; dur: 1000; loop: true"> -->
-          <a-ring id="bus-stop-1-marker" color="yellow" position="-2.536 0.5 -2.1"
+          <a-ring id="bus-stop-1-marker" color="yellow" position="-2.536 0.5 -0.932"
           animation__1="property: radius-inner; from: 2; to: 7; dir: alternate; dur: 1000; loop: true"
           animation__2="property: radius-outer; from: 2.2; to: 9; dir: alternate; dur: 1000; loop: true"
           rotation="-90 0 0" material="shader:flat" radius-inner="3" radius-outer="4" >
           </a-ring>
 
-          <a-ring id="bus-stop-1-marker-door-zone" color="yellow" position="-2.536 0.5 -2.1"
+          <a-ring id="bus-stop-1-marker-door-zone" color="yellow" position="-2.536 0.5 -0.932"
           rotation="-90 0 0" material="shader:flat" radius-inner="1.8" radius-outer="2" >
           </a-ring>
           <!-- <a-ring color="yellow" material="shader:flat" radius-inner="0.05" radius-outer="0.06">
