@@ -24,7 +24,7 @@
       AFRAME.registerState({
         initialState: {
           busPeeps: 0,
-          stopPeeps: 3
+          stopPeeps: 5
         },
 
         handlers: {
@@ -52,6 +52,78 @@
         }
       });
 
+
+      // handle visual display of bus stop peeps based on number of peeps
+      AFRAME.registerComponent('draw-stop-peeps', {
+        schema: {
+          stopPeeps: {type: 'number', default: 0},
+        },
+        init: function () {
+          // really inity
+        },
+        update: function (oldData)  {
+          var peepsDelta = this.data.stopPeeps - oldData.stopPeeps;
+          console.log("PEEPS DELTA YO");
+          console.log(peepsDelta);
+
+          this.removePeeps()  // WOW
+          //        create from scratch:
+          this.buildPeeps()
+
+          if (peepsDelta === -1) {
+            document.querySelector("#roberta").removeAttribute("animation__board");
+            document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
+          }
+          // document.querySelector("#roberta").removeAttribute("animation__board");
+          // document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
+        },
+        buildPeeps: function () {
+          for (i=0; i < this.data.stopPeeps; i++) {
+            var peepEl = document.createElement('a-entity');
+            peepEl.setAttribute("mixin", "peep1 bounce");
+            this.el.appendChild(peepEl);
+            peepEl.setAttribute("class", "peeps");
+            peepEl.setAttribute("position", "0 0.2 " + i);
+            peepEl.setAttribute("rotation", "0 270 0");
+            if (i===0) {
+              peepEl.setAttribute("id", "roberta");
+            };
+          }
+        },
+        removePeeps: function () {
+          console.log("************************* REMOVE CALLED ************************* ");
+          // var children = tableFields.children;
+          // for (var i = 0; i < children.length; i++) {
+          //   var tableChild = children[i];
+          //   // Do stuff
+          // }
+
+          var x = document.getElementsByClassName("peeps");
+          var i;
+          for (i = 0; i < x.length; i++) {
+            x[i].parentNode.removeChild(x[i]);
+            //   var forEl = result[i];
+              console.log("ONE REMOVED");
+
+            //   forEl.parentNode.removeChild(forEl);
+
+          }
+
+          //
+          // var result = document.querySelector(".peeps").children;
+          // console.log(result);
+          // numPeeps = result.length;
+          // console.log(numPeeps);
+          // for (i=0; i < numPeeps; i++) {
+          //   var forEl = result[i];
+          //   forEl.parentNode.removeChild(forEl);
+          //
+          //
+          //   console.log("ONE REMOVED");
+          // }
+        }
+      });
+
       // passengers board the bus if bus is within threshold distance of busstop
       AFRAME.registerComponent('boarding', {
         schema: {
@@ -63,7 +135,7 @@
           stopPeeps: {type: 'number', default: 0}
         },
         init: function () {
-          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, 1000, this);
+          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, this.data.delay, this);
           this.comparisonVector = new THREE.Vector3();
           this.positionDelta = Number(this.data.distance) + 1;
           this.targetEl = document.querySelector("#" + this.data.target);
@@ -95,8 +167,9 @@
               if (!stopEmpty) {
                 AFRAME.scenes[0].emit('increaseBusPeeps');
                 AFRAME.scenes[0].emit('decreaseStopPeeps');
-                document.querySelector("#roberta").removeAttribute("animation__board");
-                document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
+                // this should happen in the component when the busstop peeps # is updated
+                // document.querySelector("#roberta").removeAttribute("animation__board");
+                // document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
 
                 console.log("1 PEEPS BOARDED");
               } else {
@@ -188,6 +261,16 @@
                        lightPosition: 0 0.01 -0.46" scale="10 10 10">
 </a-entity>
       <a-assets>
+          <a-mixin id="bounce"
+          animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
+          animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"></a-mixin>
+          <a-mixin id="peep1" scale="0.1 0.1 0.1" obj-model="obj: url(models/city-builder-obj/chr_worker1.obj); mtl: url(models/city-builder-obj/chr_worker1.mtl)"></a-mixin>
+
+          <a-mixin id="peep2" scale="0.1 0.1 0.1" obj-model="obj: url(models/city-builder-obj/chr_worker2.obj); mtl: url(models/city-builder-obj/chr_worker2.mtl)"></a-mixin>
+          <a-mixin id="peep3" scale="0.1 0.1 0.1" obj-model="obj: url(models/city-builder-obj/chr_worker3.obj); mtl: url(models/city-builder-obj/chr_worker3.mtl)"></a-mixin>
+
+
+
           <img id="destination-queens" src="images/Q9ALimitedOrangeLED.gif" />
           <img id="sky" src="images/sky3.jpg" />
           <script id="bustemplate" type="text/html">
@@ -265,23 +348,11 @@
         <a-text id="stopPeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="yellow" font="monoid"></a-text>
 
 
-        <a-entity class="minis">
-          <a-obj-model
-            id="bob"
-            animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
-            animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
-            position="0 0.2 0" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker1.obj" mtl="models/city-builder-obj/chr_worker1.mtl"></a-obj-model>
-          <a-obj-model
-            id="roberta"
-            animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
-            animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
-            position="0 0.2 -1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker2.obj" mtl="models/city-builder-obj/chr_worker2.mtl"></a-obj-model>
-          <a-obj-model
-            id="tom"
-            animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
-            animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"
-            position="0 0.2 1" rotation="0 270 0" scale="0.1 0.1 0.1" src="models/city-builder-obj/chr_worker3.obj" mtl="models/city-builder-obj/chr_worker3.mtl"></a-obj-model>
-
+        <a-entity draw-stop-peeps bind__draw-stop-peeps="stopPeeps: stopPeeps" position="0 0 -1">
+          <!-- PEEPS GO HERE -->
+          <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
+          <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
+          <a-entity id="tom" mixin="peep3 bounce" position="0 0.2 1" rotation="0 270 0"></a-entity> -->
 
         </a-entity>
 
