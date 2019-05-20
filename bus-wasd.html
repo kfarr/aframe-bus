@@ -91,36 +91,11 @@
           }
         },
         removePeeps: function () {
-          console.log("************************* REMOVE CALLED ************************* ");
-          // var children = tableFields.children;
-          // for (var i = 0; i < children.length; i++) {
-          //   var tableChild = children[i];
-          //   // Do stuff
-          // }
-
-          var x = document.getElementsByClassName("peeps");
-          var i;
-          for (i = 0; i < x.length; i++) {
-            x[i].parentNode.removeChild(x[i]);
-            //   var forEl = result[i];
-              console.log("ONE REMOVED");
-
-            //   forEl.parentNode.removeChild(forEl);
-
+          var myNode = document.getElementById("peepsParent");
+          while (myNode.firstChild) {
+              myNode.removeChild(myNode.firstChild);
+              // console.log("ONE REMOVED");
           }
-
-          //
-          // var result = document.querySelector(".peeps").children;
-          // console.log(result);
-          // numPeeps = result.length;
-          // console.log(numPeeps);
-          // for (i=0; i < numPeeps; i++) {
-          //   var forEl = result[i];
-          //   forEl.parentNode.removeChild(forEl);
-          //
-          //
-          //   console.log("ONE REMOVED");
-          // }
         }
       });
 
@@ -202,20 +177,20 @@
         },
         everySecond: function() {
 
-          AFRAME.log("******* ENTITY CONSOLE LOG *******\nCurrent Position");
-          AFRAME.log(this.el.object3D.position);
+          AFRAME.log("******* ENTITY CONSOLE LOG *******\nCurrent Position", 'bus');
+          AFRAME.log(this.el.object3D.position, 'bus');
           // AFRAME.log("Previous Position");
           // AFRAME.log(this.lastPosition);
-          AFRAME.log("Velocity (m/s)");
+          AFRAME.log("Velocity (m/s)", 'bus');
           this.velocity.subVectors(this.el.object3D.position, this.lastPosition);
-          AFRAME.log(this.velocity);
+          AFRAME.log(this.velocity, 'bus');
 
           this.speed = this.velocity.length()
-          AFRAME.log("Speed: " + this.speed + " m/s");
+          AFRAME.log("Speed: " + this.speed + " m/s", 'bus');
           this.acceleration = this.speed - this.lastSpeed;
-          AFRAME.log("Acceleration: " + this.acceleration + " m/s^2");
+          AFRAME.log("Acceleration: " + this.acceleration + " m/s^2", 'bus');
 
-          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.busPeeps);
+          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.busPeeps, 'bus');
 
 
           // AFRAME.log("Speed via Math");
@@ -348,7 +323,7 @@
         <a-text id="stopPeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="yellow" font="monoid"></a-text>
 
 
-        <a-entity draw-stop-peeps bind__draw-stop-peeps="stopPeeps: stopPeeps" position="0 0 -1">
+        <a-entity id="peepsParent" draw-stop-peeps bind__draw-stop-peeps="stopPeeps: stopPeeps" position="0 0 -1">
           <!-- PEEPS GO HERE -->
           <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
           <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
