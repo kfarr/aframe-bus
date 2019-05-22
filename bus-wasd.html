@@ -71,11 +71,14 @@
           this.buildPeeps()
 
           if (peepsDelta === -1) {
-            document.querySelector("#roberta").removeAttribute("animation__board");
-            document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
+            document.querySelector("#boardingPeep").removeAttribute("animation__board");
+            document.querySelector("#boardingPeep").setAttribute("visible", true);
+            document.querySelector("#boardingPeep").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000");
+            setTimeout(
+                function() {
+                  document.querySelector("#boardingPeep").setAttribute("visible", false);
+                }, 1000);
           }
-          // document.querySelector("#roberta").removeAttribute("animation__board");
-          // document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
         },
         buildPeeps: function () {
           for (i=0; i < this.data.stopPeeps; i++) {
@@ -85,9 +88,6 @@
             peepEl.setAttribute("class", "peeps");
             peepEl.setAttribute("position", "0 0.2 " + i);
             peepEl.setAttribute("rotation", "0 270 0");
-            if (i===0) {
-              peepEl.setAttribute("id", "roberta");
-            };
           }
         },
         removePeeps: function () {
@@ -142,10 +142,6 @@
               if (!stopEmpty) {
                 AFRAME.scenes[0].emit('increaseBusPeeps');
                 AFRAME.scenes[0].emit('decreaseStopPeeps');
-                // this should happen in the component when the busstop peeps # is updated
-                // document.querySelector("#roberta").removeAttribute("animation__board");
-                // document.querySelector("#roberta").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000;");
-
                 console.log("1 PEEPS BOARDED");
               } else {
                 console.log("Stop Empty");
@@ -322,6 +318,7 @@
 
         <a-text id="stopPeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="yellow" font="monoid"></a-text>
 
+        <a-entity id="boardingPeep" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
 
         <a-entity id="peepsParent" draw-stop-peeps bind__draw-stop-peeps="stopPeeps: stopPeeps" position="0 0 -1">
           <!-- PEEPS GO HERE -->
