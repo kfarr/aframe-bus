@@ -70,8 +70,6 @@ https://poly.google.com/view/8ySm0IGHA5W
 http://i841.photobucket.com/albums/zz339/akamtabx36/Paperbuses/1722-3.png
 https://cptdb.ca/uploads/monthly_06_2008/post-2065-1214100948.png
 
-
-
 LED signs:
 https://www.nyctransitforums.com/topic/13822-animated-luminator-bus-signs/?page=17
 
@@ -114,3 +112,13 @@ sidewalk: https://poly.google.com/view/8MDQir-qOAT
 
 additional road texture options:
 https://github.com/MicroGSD/RoadArchitect/blob/master/Materials/Textures/GSDRoad1_Diffuse.png
+
+More Inspiration:
+fast train https://vimeo.com/stock/clip-298549118-low-poly-3d-animation-of-the-city-life--the-high-speed-passenger-train-travels-through-the-countryside--modern-electric-railway
+https://vimeo.com/stock/clip-298549147-a-white--delivery-truck-with-a-trailer-driving-down-the-road-from-a-city-to-the-small--rural-town--the-vehicle-is-carrying-heavy
+
+Caltrain paper bus:
+https://cptdb.ca/topic/9470-papertrain-thread/
+
+More research:
+aframe entity reparenting
