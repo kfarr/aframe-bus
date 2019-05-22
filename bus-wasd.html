@@ -275,7 +275,7 @@
 
 
       <a-entity id="bus" position-log wasd-controls="acceleration: 260;" position="0 0 10">
-        <a-text id="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="busPeeps" color="cyan" font="monoid"></a-text>
+        <a-text id="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="busPeeps" color="cyan" font="aileronsemibold"></a-text>
 
         <a-ring id="bus-door-marker" color="cyan" position="2 0.5 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
         bind__boarding="busPeeps: busPeeps; stopPeeps: stopPeeps" boarding="target: bus-stop-1-marker">
@@ -316,7 +316,7 @@
       <a-entity class="bus-stop" id="bus-stop-1" position="4.5 0 25">
         <!-- <a-entity text="value: 0" position="0 10 0" scale="5 5 5"></a-entity> -->
 
-        <a-text id="stopPeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="yellow" font="monoid"></a-text>
+        <a-text id="stopPeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="yellow" font="aileronsemibold"></a-text>
 
         <a-entity id="boardingPeep" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
 
