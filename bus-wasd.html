@@ -23,31 +23,31 @@
 
       AFRAME.registerState({
         initialState: {
-          busPeeps: 0,
+          bus1Peeps: 0,
           bus1Capacity: 10,
-          stopPeeps: 10,
+          stop1Peeps: 10,
           stop2Peeps: 0
         },
 
         handlers: {
-          decreaseBusPeeps: function (state, action) {
-            state.busPeeps -= 1;
+          decreaseBus1Peeps: function (state, action) {
+            state.bus1Peeps -= 1;
             // if < 0 then make 0 (or throw exception?)
           },
 
-          increaseBusPeeps: function (state, action) {
-            state.busPeeps += 1;
+          increaseBus1Peeps: function (state, action) {
+            state.bus1Peeps += 1;
             // stop at bus capacity
             // if state.busPeeps > action.capacity {state.busPeeps = action.capacity }
           },
 
-          decreaseStopPeeps: function (state, action) {
-            state.stopPeeps -= 1;
+          decreaseStop1Peeps: function (state, action) {
+            state.stop1Peeps -= 1;
             // if < 0 then make 0 (or throw exception?)
           },
 
-          increaseStopPeeps: function (state, action) {
-            state.increaseStopPeeps += 1;
+          increaseStop1Peeps: function (state, action) {
+            state.stop1Peeps += 1;
             // to what limit?
           }
 
@@ -146,8 +146,8 @@
               console.log(stopEmpty);
               console.log(this.data.stopPeeps);
               if (!stopEmpty) {
-                AFRAME.scenes[0].emit('increaseBusPeeps');
-                AFRAME.scenes[0].emit('decreaseStopPeeps');
+                AFRAME.scenes[0].emit('increaseBus1Peeps');
+                AFRAME.scenes[0].emit('decreaseStop1Peeps');
                 console.log("1 PEEPS BOARDED");
               } else {
                 console.log("Stop Empty");
@@ -192,7 +192,7 @@
           this.acceleration = this.speed - this.lastSpeed;
           AFRAME.log("Acceleration: " + this.acceleration + " m/s^2", 'bus');
 
-          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.busPeeps, 'bus');
+          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.bus1Peeps, 'bus');
 
 
           // AFRAME.log("Speed via Math");
@@ -283,10 +283,10 @@
 
 
       <a-entity id="bus" position-log wasd-controls="acceleration: 260;" position="0 0 10">
-        <a-text id="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="busPeeps" color="cyan" font="aileronsemibold"></a-text>
+        <a-text id="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
 
         <a-ring id="bus-door-marker" color="cyan" position="2 0.5 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
-        bind__boarding="busPeeps: busPeeps; stopPeeps: stopPeeps; capacity: bus1Capacity" boarding="target: bus-stop-1-marker">
+        bind__boarding="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity" boarding="target: bus-stop-1-marker">
         </a-ring>
 
         <a-entity id="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
@@ -324,11 +324,11 @@
       <a-entity class="bus-stop" id="bus-stop-1" position="4.5 0 25">
         <!-- <a-entity text="value: 0" position="0 10 0" scale="5 5 5"></a-entity> -->
 
-        <a-text id="stopPeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stopPeeps" color="yellow" font="aileronsemibold"></a-text>
+        <a-text id="stop1PeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
 
         <a-entity id="boardingPeep" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
 
-        <a-entity id="peepsParent" draw-stop-peeps bind__draw-stop-peeps="stopPeeps: stopPeeps" position="0 0 -1">
+        <a-entity id="peepsParent" draw-stop-peeps bind__draw-stop-peeps="stopPeeps: stop1Peeps" position="0 0 -1">
           <!-- PEEPS GO HERE -->
           <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
           <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
@@ -344,7 +344,7 @@
         <a-entity id="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat" id="carrot-advert"></a-entity>
 
         <!-- <a-ring id="mark" position="0 0.5 0" scale="100 100 100" material="shader:flat" color="yellow" rotation="-90 0 0" radius-inner="0.01" radius-outer="0.02" animation="property: scale; from: 100 100 100; to: 200 200 200; dir: alternate; dur: 1000; loop: true"> -->
-        <a-entity id="bus-stop-1-markers" bind__visible="stopPeeps !== 0">
+        <a-entity id="bus-stop-1-markers" bind__visible="stop1Peeps !== 0">
           <a-ring id="bus-stop-1-marker" color="yellow" position="-2.536 0.5 -0.932"
           animation__1="property: radius-inner; from: 2; to: 7; dir: alternate; dur: 1000; loop: true"
           animation__2="property: radius-outer; from: 2.2; to: 9; dir: alternate; dur: 1000; loop: true"
