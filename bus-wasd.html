@@ -66,8 +66,8 @@
         },
         update: function (oldData)  {
           var peepsDelta = this.data.stopPeeps - oldData.stopPeeps;
-          console.log("PEEPS DELTA YO");
-          console.log(peepsDelta);
+          // console.log("PEEPS DELTA YO");
+          // console.log(peepsDelta);
 
           this.removePeeps()  // WOW
           //        create from scratch:
@@ -125,15 +125,16 @@
         },
         everySecond: function() {
           // if distance between this element and the target element are less than distance
-          // if current passengers is less than capacity
-          // subtract 1 passenger from target bus stop
-          // add 1 passenger to bus
-          console.log(this.el.object3D.getWorldPosition(this.positionThis));
-          console.log(this.targetEl.object3D.getWorldPosition(this.positionTarget));
+          // AND if current passengers is less than capacity
+          // THEN subtract 1 passenger from target bus stop and add 1 passenger to bus
+
+          // Set positionThis and positionTarget based on current location
+          this.el.object3D.getWorldPosition(this.positionThis);
+          this.targetEl.object3D.getWorldPosition(this.positionTarget);
 
           this.comparisonVector.subVectors(this.positionThis, this.positionTarget);
           this.positionDelta = this.comparisonVector.length();
-          console.log(this.positionDelta);
+          // console.log(this.positionDelta);
 
           // if bus is close enough to bus stop
           if (this.positionDelta < Number(this.data.distance)) {
@@ -143,17 +144,17 @@
             // console.log(busFull);
             if (!busFull) {
               var stopEmpty = Number(this.data.stopPeeps) == 0;
-              console.log(stopEmpty);
-              console.log(this.data.stopPeeps);
+              // console.log(stopEmpty);
+              // console.log(this.data.stopPeeps);
               if (!stopEmpty) {
                 AFRAME.scenes[0].emit('increaseBus1Peeps');
                 AFRAME.scenes[0].emit('decreaseStop1Peeps');
-                console.log("1 PEEPS BOARDED");
+                AFRAME.log("1 PEEPS BOARDED", 'bus1');
               } else {
-                console.log("Stop Empty");
+                AFRAME.log("Stop Empty", 'bus1');
               }
             } else {
-              console.log("Bus Full");
+              AFRAME.log("Bus Full", 'bus1');
             }
           }
         },
@@ -179,20 +180,20 @@
         },
         everySecond: function() {
 
-          AFRAME.log("******* ENTITY CONSOLE LOG *******\nCurrent Position", 'bus');
-          AFRAME.log(this.el.object3D.position, 'bus');
+          AFRAME.log("******* ENTITY CONSOLE LOG *******\nCurrent Position", 'bus1');
+          AFRAME.log(this.el.object3D.position, 'bus1');
           // AFRAME.log("Previous Position");
           // AFRAME.log(this.lastPosition);
-          AFRAME.log("Velocity (m/s)", 'bus');
+          AFRAME.log("Velocity (m/s)", 'bus1');
           this.velocity.subVectors(this.el.object3D.position, this.lastPosition);
-          AFRAME.log(this.velocity, 'bus');
+          AFRAME.log(this.velocity, 'bus1');
 
           this.speed = this.velocity.length()
-          AFRAME.log("Speed: " + this.speed + " m/s", 'bus');
+          AFRAME.log("Speed: " + this.speed + " m/s", 'bus1');
           this.acceleration = this.speed - this.lastSpeed;
-          AFRAME.log("Acceleration: " + this.acceleration + " m/s^2", 'bus');
+          AFRAME.log("Acceleration: " + this.acceleration + " m/s^2", 'bus1');
 
-          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.bus1Peeps, 'bus');
+          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.bus1Peeps, 'bus1');
 
 
           // AFRAME.log("Speed via Math");
