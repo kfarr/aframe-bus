@@ -224,22 +224,28 @@
       <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 28 0"> </a-entity>
       <a-entity id="lookCubeHack" orbit-look-at-hack geometry="" static-body="shape: box" position="0 0 0" scale="1 1 1"></a-entity>
 
-      <!-- <a-entity id="env1" scale="10 10 10" environment="preset:forest; shadow:true; skyType: atmosphere; lightPosition: .108 .294 .095"></a-entity> -->
+      <a-entity environment="seed: 8;
+        skyType: gradient;
+        skyColor: #24b5ff;
+        horizonColor: #eff9f7;
+        lighting: distant;
+        lightPosition: { x: -1.2, y: 0.88, z: -0.55};
+        fog: false;
+        flatShading: false;
+        ground: noise;
+        groundTexture: squares;
+        groundColor: #939a24;
+        groundColor2: #989d2e;
+        dressing: trees;
+        dressingAmount: 200;
+        dressingColor: #888b1d;
+        dressingScale: 4.5;
+        dressingOnPlayArea: false;
+        grid: none;
+        gridColor: #c5a543;
+        shadow: false" position="0 -0.1 0" scale="8 8 8">
 
-      <a-entity environment="preset: starry;
-                       ground: canyon;
-                       groundYScale: 4;
-                       groundTexture: squares;
-                       groundColor: #606060;
-                       groundColor2: #505050;
-                       dressing:none;
-                       dressingColor: #477a49;
-                       grid: none;
-                       shadow: false;
-                       fog: 0;
-                       lighting: none;
-                       lightPosition: 0 0.01 -0.46" scale="10 10 10">
-</a-entity>
+        </a-entity>
       <a-assets>
           <a-mixin id="bounce"
           animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
