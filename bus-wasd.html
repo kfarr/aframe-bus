@@ -24,7 +24,8 @@
       AFRAME.registerState({
         initialState: {
           busPeeps: 0,
-          stopPeeps: 5
+          stopPeeps: 10,
+          stop2Peeps: 0
         },
 
         handlers: {
@@ -60,6 +61,7 @@
         },
         init: function () {
           // really inity
+          this.myTimer = 0;
         },
         update: function (oldData)  {
           var peepsDelta = this.data.stopPeeps - oldData.stopPeeps;
@@ -74,10 +76,13 @@
             document.querySelector("#boardingPeep").removeAttribute("animation__board");
             document.querySelector("#boardingPeep").setAttribute("visible", true);
             document.querySelector("#boardingPeep").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000");
-            setTimeout(
-                function() {
-                  document.querySelector("#boardingPeep").setAttribute("visible", false);
-                }, 1000);
+            if (this.myTimer) {
+              clearTimeout(this.myTimer);
+            }
+            this.myTimer = setTimeout(
+              function() {
+                document.querySelector("#boardingPeep").setAttribute("visible", false);
+              }, 1000);
           }
         },
         buildPeeps: function () {
@@ -105,7 +110,7 @@
           delay: {type: 'number', default: 1000},
           target: {type: 'string', default: "bus-stop"},
           distance: {type: 'number', default: 2},
-          capacity: {type: 'number', default: 4},
+          capacity: {type: 'number', default: 10},
           busPeeps: {type: 'number', default: 0},
           stopPeeps: {type: 'number', default: 0}
         },
@@ -213,9 +218,11 @@
 
   </head>
   <body>
-    <a-scene stats background="color: #ECECEC">
+    <a-scene log="console: false" stats background="color: #ECECEC">
       <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 28 0"> </a-entity>
       <a-entity id="lookCubeHack" orbit-look-at-hack geometry="" static-body="shape: box" position="0 0 0" scale="1 1 1"></a-entity>
+
+      <!-- <a-entity id="env1" scale="10 10 10" environment="preset:forest; shadow:true; skyType: atmosphere; lightPosition: .108 .294 .095"></a-entity> -->
 
       <a-entity environment="preset: starry;
                        ground: canyon;
