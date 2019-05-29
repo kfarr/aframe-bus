@@ -48,6 +48,11 @@
           increaseStop1Peeps: function (state, action) {
             state.stop1Peeps += 1;
             // to what limit?
+          },
+
+          increaseStop2Peeps: function (state, action) {
+            state.stop2Peeps += 1;
+            // to what limit?
           }
 
         }
@@ -107,8 +112,8 @@
         }
       });
 
-      // passengers board the bus if bus is within threshold distance of busstop
-      AFRAME.registerComponent('boarding', {
+      // passengers board the bus if bus is within threshold distance of target bus stop
+      AFRAME.registerComponent('board', {
         schema: {
           delay: {type: 'number', default: 1000},
           target: {type: 'string', default: "bus-stop"},
@@ -159,6 +164,54 @@
           this.throttledFunction();  // Called once a second.
         },
       });
+
+
+      // passengers alight the bus if bus is within threshold distance of target bus stop
+      AFRAME.registerComponent('alight', {
+        schema: {
+          delay: {type: 'number', default: 1000},
+          target: {type: 'string', default: "bus-stop"},
+          distance: {type: 'number', default: 2},
+          busPeeps: {type: 'number', default: 0}
+        },
+        init: function () {
+          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, this.data.delay, this);
+          this.comparisonVector = new THREE.Vector3();
+          this.positionDelta = Number(this.data.distance) + 1;
+          this.targetEl = document.querySelector("#" + this.data.target);
+          this.positionThis = new THREE.Vector3();
+          this.positionTarget = new THREE.Vector3();
+        },
+        everySecond: function() {
+          // if distance between this element and the target element are less than distance
+          // AND if current passengers > 0
+          // THEN subtract 1 passenger from this bus and add 1 to target bus stop
+
+          // Set positionThis and positionTarget based on current location
+          this.el.object3D.getWorldPosition(this.positionThis);
+          this.targetEl.object3D.getWorldPosition(this.positionTarget);
+
+          this.comparisonVector.subVectors(this.positionThis, this.positionTarget);
+          this.positionDelta = this.comparisonVector.length();
+          // console.log(this.positionDelta);
+
+          // if bus is close enough to bus stop
+          if (this.positionDelta < Number(this.data.distance)) {
+            var busEmpty = Number(this.data.busPeeps) <= 0;
+            if (!busEmpty) {
+              AFRAME.scenes[0].emit('decreaseBus1Peeps');
+              AFRAME.scenes[0].emit('increaseStop2Peeps');
+              AFRAME.log("1 PEEPS ALIGHTED", 'bus1');
+            } else {
+              AFRAME.log("Bus Empty!", 'bus1');
+            }
+          }
+        },
+        tick: function(){
+          this.throttledFunction();  // Called once a second.
+        },
+      });
+
 
       AFRAME.registerComponent('position-log', {
         schema: {
@@ -276,7 +329,8 @@
       <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10">
         <a-text class="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
         <a-ring class="bus-door-marker" color="cyan" position="2 0.5 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
-        boarding="target: bus-stop-1-marker" bind__boarding="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity"></a-ring>
+        board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity"
+        alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps"></a-ring>
         <a-entity class="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
         <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
         <a-entity class="bus-model" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" ></a-entity>
