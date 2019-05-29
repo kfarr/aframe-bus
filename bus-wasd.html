@@ -58,6 +58,7 @@
       AFRAME.registerComponent('draw-stop-peeps', {
         schema: {
           stopPeeps: {type: 'number', default: 0},
+          boardingPeepId: {type: 'string'}
         },
         init: function () {
           // really inity
@@ -73,15 +74,16 @@
           this.buildPeeps()
 
           if (peepsDelta === -1) {
-            document.querySelector("#boardingPeep").removeAttribute("animation__board");
-            document.querySelector("#boardingPeep").setAttribute("visible", true);
-            document.querySelector("#boardingPeep").setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000");
+            document.getElementById(this.data.boardingPeepId).removeAttribute("animation__board");
+            document.getElementById(this.data.boardingPeepId).setAttribute("visible", true);
+            document.getElementById(this.data.boardingPeepId).setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000");
             if (this.myTimer) {
               clearTimeout(this.myTimer);
             }
+            var that = this;
             this.myTimer = setTimeout(
               function() {
-                document.querySelector("#boardingPeep").setAttribute("visible", false);
+                document.getElementById(that.data.boardingPeepId).setAttribute("visible", false);
               }, 1000);
           }
         },
@@ -96,7 +98,8 @@
           }
         },
         removePeeps: function () {
-          var myNode = document.getElementById("peepsParent");
+         // var myNode = document.getElementById("peepsParent");
+          var myNode = this.el;
           while (myNode.firstChild) {
               myNode.removeChild(myNode.firstChild);
               // console.log("ONE REMOVED");
@@ -331,9 +334,9 @@
 
         <a-text id="stop1PeepLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
 
-        <a-entity id="boardingPeep" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
+        <a-entity id="boardingPeep1" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
 
-        <a-entity id="peepsParent" draw-stop-peeps bind__draw-stop-peeps="stopPeeps: stop1Peeps" position="0 0 -1">
+        <a-entity id="peepsParent1" draw-stop-peeps="boardingPeepId: boardingPeep1" bind__draw-stop-peeps="stopPeeps: stop1Peeps" position="0 0 -1">
           <!-- PEEPS GO HERE -->
           <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
           <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
