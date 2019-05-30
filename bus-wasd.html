@@ -71,11 +71,25 @@
         },
         update: function (oldData)  {
           var peepsDelta = this.data.stopPeeps - oldData.stopPeeps;
-          // console.log("PEEPS DELTA YO");
-          // console.log(peepsDelta);
 
-          this.removePeeps()  // WOW
-          //        create from scratch:
+          if (peepsDelta === 1) {
+            document.getElementById(this.data.boardingPeepId).removeAttribute("animation__alight");
+            document.getElementById(this.data.boardingPeepId).setAttribute("visible", true);
+            document.getElementById(this.data.boardingPeepId).setAttribute("animation__alight", "property: object3D.position.x; easing: linear; from: -4; to: 0; dur: 1000");
+            if (this.myTimer) {
+              clearTimeout(this.myTimer);
+            }
+            var that = this;
+            this.myTimer = setTimeout(
+              function() {
+                document.getElementById(that.data.boardingPeepId).setAttribute("visible", false);
+                that.removePeeps()
+                that.buildPeeps()
+              }, 1000);
+            return;
+          }
+
+          this.removePeeps()
           this.buildPeeps()
 
           if (peepsDelta === -1) {
@@ -376,8 +390,8 @@
 
       <a-entity id="bus-stop-2" class="bus-stop" position="4.5 0 -30">
         <a-text class="stopPeepsLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop2Peeps" color="yellow" font="aileronsemibold"></a-text>
-        <a-entity id="boardingPeep2" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
-        <a-entity id="peepsParent2" draw-stop-peeps="boardingPeepId: boardingPeep1" bind__draw-stop-peeps="stopPeeps: stop2Peeps" position="0 0 -1">
+        <a-entity id="alightingPeep2" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 90 0"></a-entity>
+        <a-entity id="peepsParent2" draw-stop-peeps="boardingPeepId: alightingPeep2" bind__draw-stop-peeps="stopPeeps: stop2Peeps" position="0 0 -1">
           <!-- PEEPS GO HERE -->
           <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
           <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
