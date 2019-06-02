@@ -22,6 +22,8 @@
 
       AFRAME.registerState({
         initialState: {
+          scale: 1,
+          detectionRadius: 2,
           bus1Peeps: 0,
           bus1Capacity: 10,
           stop1Peeps: 10,
@@ -43,6 +45,10 @@
           increaseStop2Peeps: function (state, action) {
             state.stop2Peeps += 1;
           }
+        },
+        computeState: function (newState, payload) {
+          // effective distance (radius) to monitor for door zone collision based on scale of scene
+          newState.distance = Number(newState.detectionRadius) / Number(newState.scale);
         }
       });
 
@@ -167,7 +173,7 @@
       });
 
 
-      // passengers alight the bus if bus is within threshold distance of target bus stop
+      // passengers alight the bus if bus is within threshold distance (in m) of target bus stop
       AFRAME.registerComponent('alight', {
         schema: {
           delay: {type: 'number', default: 1000},
@@ -246,8 +252,6 @@
 
           AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.bus1Peeps, 'bus1');
 
-
-          // AFRAME.log("Speed via Math");
           // this.speed = Math.sqrt(Math.pow(this.velocity.getComponent(0), 2) + Math.pow(this.velocity.getComponent(1), 2) + Math.pow(this.velocity.getComponent(2), 2));
           // AFRAME.log(this.speed);
 
@@ -330,8 +334,8 @@
       <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10">
         <a-text class="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
         <a-ring class="bus-door-marker" color="cyan" position="2 0.5 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
-        board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity"
-        alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps"></a-ring>
+        board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity; distance: distance"
+        alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps; distance: distance"></a-ring>
         <a-entity class="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
         <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
         <a-entity class="bus-model" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" ></a-entity>
