@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>View from the Sky • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mayognaise/aframe-gif-shader/dist/aframe-gif-shader.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-slice9-component/dist/aframe-slice9-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-orbit-controls@1.2.0/dist/aframe-orbit-controls.min.js"></script>
+    <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-log-component/dist/aframe-log-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-state-component@6.6.0/dist/aframe-state-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-meshline-component@0.2.1/dist/aframe-meshline-component.min.js"></script>
+
+    <script src="forward.js"></script>
+    <script src="clock.js"></script>
+
+    <script>
+
+      AFRAME.registerState({
+        initialState: {
+          scale: 4,
+          detectionRadius: 2,
+          bus1Peeps: 0,
+          bus1Capacity: 10,
+          stop1Peeps: 10,
+          stop2Peeps: 0
+        },
+        handlers: {
+          decreaseBus1Peeps: function (state, action) {
+            state.bus1Peeps -= 1;
+          },
+          increaseBus1Peeps: function (state, action) {
+            state.bus1Peeps += 1;
+          },
+          decreaseStop1Peeps: function (state, action) {
+            state.stop1Peeps -= 1;
+          },
+          increaseStop1Peeps: function (state, action) {
+            state.stop1Peeps += 1;
+          },
+          increaseStop2Peeps: function (state, action) {
+            state.stop2Peeps += 1;
+          }
+        },
+        computeState: function (newState, payload) {
+          // effective distance (radius) to monitor for door zone collision based on scale of scene
+          newState.computedDistance = Number(newState.detectionRadius) / Number(newState.scale);
+          newState.computedScaleString = (1 / Number(newState.scale) + " ").repeat(3);
+        }
+      });
+
+      // handle visual display of bus stop peeps based on number of peeps
+      AFRAME.registerComponent('draw-stop-peeps', {
+        schema: {
+          stopPeeps: {type: 'number', default: 0},
+          boardingPeepId: {type: 'string'}
+        },
+        init: function () {
+          // really inity
+          this.myTimer = 0;
+        },
+        update: function (oldData)  {
+          var peepsDelta = this.data.stopPeeps - oldData.stopPeeps;
+
+          if (peepsDelta === 1) {
+            document.getElementById(this.data.boardingPeepId).removeAttribute("animation__alight");
+            document.getElementById(this.data.boardingPeepId).setAttribute("visible", true);
+            document.getElementById(this.data.boardingPeepId).setAttribute("animation__alight", "property: object3D.position.x; easing: linear; from: -4; to: 0; dur: 1000");
+            if (this.myTimer) {
+              clearTimeout(this.myTimer);
+            }
+            var that = this;
+            this.myTimer = setTimeout(
+              function() {
+                document.getElementById(that.data.boardingPeepId).setAttribute("visible", false);
+                that.removePeeps()
+                that.buildPeeps()
+              }, 1000);
+            return;
+          }
+
+          this.removePeeps()
+          this.buildPeeps()
+
+          if (peepsDelta === -1) {
+            document.getElementById(this.data.boardingPeepId).removeAttribute("animation__board");
+            document.getElementById(this.data.boardingPeepId).setAttribute("visible", true);
+            document.getElementById(this.data.boardingPeepId).setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000");
+            if (this.myTimer) {
+              clearTimeout(this.myTimer);
+            }
+            var that = this;
+            this.myTimer = setTimeout(
+              function() {
+                document.getElementById(that.data.boardingPeepId).setAttribute("visible", false);
+              }, 1000);
+            }
+        },
+        buildPeeps: function () {
+          for (i=0; i < this.data.stopPeeps; i++) {
+            var peepEl = document.createElement('a-entity');
+            peepEl.setAttribute("mixin", "peep1 bounce");
+            this.el.appendChild(peepEl);
+            peepEl.setAttribute("class", "peeps");
+            peepEl.setAttribute("position", "0 0.2 " + i);
+            peepEl.setAttribute("rotation", "0 270 0");
+          }
+        },
+        removePeeps: function () {
+         // var myNode = document.getElementById("peepsParent");
+          var myNode = this.el;
+          while (myNode.firstChild) {
+              myNode.removeChild(myNode.firstChild);
+              // console.log("ONE REMOVED");
+          }
+        }
+      });
+
+      // passengers board the bus if bus is within threshold distance of target bus stop
+      AFRAME.registerComponent('board', {
+        schema: {
+          delay: {type: 'number', default: 1000},
+          target: {type: 'string', default: "bus-stop"},
+          distance: {type: 'number', default: 2},
+          capacity: {type: 'number', default: 10},
+          busPeeps: {type: 'number', default: 0},
+          stopPeeps: {type: 'number', default: 0}
+        },
+        init: function () {
+          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, this.data.delay, this);
+          this.comparisonVector = new THREE.Vector3();
+          this.positionDelta = Number(this.data.distance) + 1;
+          this.targetEl = document.querySelector("#" + this.data.target);
+          this.positionThis = new THREE.Vector3();
+          this.positionTarget = new THREE.Vector3();
+        },
+        everySecond: function() {
+          // if distance between this element and the target element are less than distance
+          // AND if current passengers is less than capacity
+          // THEN subtract 1 passenger from target bus stop and add 1 passenger to bus
+
+          // Set positionThis and positionTarget based on current location
+          this.el.object3D.getWorldPosition(this.positionThis);
+          this.targetEl.object3D.getWorldPosition(this.positionTarget);
+
+          this.comparisonVector.subVectors(this.positionThis, this.positionTarget);
+          this.positionDelta = this.comparisonVector.length();
+          // console.log(this.positionDelta);
+
+          // if bus is close enough to bus stop
+          if (this.positionDelta < Number(this.data.distance)) {
+            var busFull = Number(this.data.busPeeps) == Number(this.data.capacity);
+            if (!busFull) {
+              var stopEmpty = Number(this.data.stopPeeps) == 0;
+              if (!stopEmpty) {
+                AFRAME.scenes[0].emit('increaseBus1Peeps');
+                AFRAME.scenes[0].emit('decreaseStop1Peeps');
+                AFRAME.log("1 PEEPS BOARDED", 'bus1');
+              } else {
+                AFRAME.log("Stop Empty", 'bus1');
+              }
+            } else {
+              AFRAME.log("Bus Full", 'bus1');
+            }
+          }
+        },
+        tick: function(){
+          this.throttledFunction();  // Called once a second.
+        },
+      });
+
+
+      // passengers alight the bus if bus is within threshold distance (in m) of target bus stop
+      AFRAME.registerComponent('alight', {
+        schema: {
+          delay: {type: 'number', default: 1000},
+          target: {type: 'string', default: "bus-stop"},
+          distance: {type: 'number', default: 2},
+          busPeeps: {type: 'number', default: 0}
+        },
+        init: function () {
+          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, this.data.delay, this);
+          this.comparisonVector = new THREE.Vector3();
+          this.positionDelta = Number(this.data.distance) + 1;
+          this.targetEl = document.querySelector("#" + this.data.target);
+          this.positionThis = new THREE.Vector3();
+          this.positionTarget = new THREE.Vector3();
+        },
+        everySecond: function() {
+          // if distance between this element and the target element are less than distance
+          // AND if current passengers > 0
+          // THEN subtract 1 passenger from this bus and add 1 to target bus stop
+
+          // Set positionThis and positionTarget based on current location
+          this.el.object3D.getWorldPosition(this.positionThis);
+          this.targetEl.object3D.getWorldPosition(this.positionTarget);
+
+          this.comparisonVector.subVectors(this.positionThis, this.positionTarget);
+          this.positionDelta = this.comparisonVector.length();
+          // console.log(this.positionDelta);
+
+          // if bus is close enough to bus stop
+          if (this.positionDelta < Number(this.data.distance)) {
+            var busEmpty = Number(this.data.busPeeps) <= 0;
+            if (!busEmpty) {
+              AFRAME.scenes[0].emit('decreaseBus1Peeps');
+              AFRAME.scenes[0].emit('increaseStop2Peeps');
+              AFRAME.log("1 PEEPS ALIGHTED", 'bus1');
+            } else {
+              AFRAME.log("Bus Empty!", 'bus1');
+            }
+          }
+        },
+        tick: function(){
+          this.throttledFunction();  // Called once a second.
+        },
+      });
+
+
+      AFRAME.registerComponent('position-log', {
+        schema: {
+
+        },
+        init: function() {
+          this.throttledFunction = AFRAME.utils.throttle(this.everySecond, 1000, this);
+//          this.last = this.el.getAttribute('position');
+          this.lastPosition = new THREE.Vector3();
+          this.lastPosition.copy(this.el.object3D.position);
+          this.velocity = new THREE.Vector3();
+          this.speed = 0;
+          this.lastSpeed = 0;
+          this.passengers = 0;
+          this.acceleration = 0;
+        },
+        everySecond: function() {
+
+          AFRAME.log("******* ENTITY CONSOLE LOG *******\nCurrent Position", 'bus1');
+          AFRAME.log(this.el.object3D.position, 'bus1');
+          // AFRAME.log("Previous Position");
+          // AFRAME.log(this.lastPosition);
+          AFRAME.log("Velocity (m/s)", 'bus1');
+          this.velocity.subVectors(this.el.object3D.position, this.lastPosition);
+          AFRAME.log(this.velocity, 'bus1');
+
+          this.speed = this.velocity.length()
+          AFRAME.log("Speed: " + this.speed + " m/s", 'bus1');
+          this.acceleration = this.speed - this.lastSpeed;
+          AFRAME.log("Acceleration: " + this.acceleration + " m/s^2", 'bus1');
+
+          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.bus1Peeps, 'bus1');
+
+          // this.speed = Math.sqrt(Math.pow(this.velocity.getComponent(0), 2) + Math.pow(this.velocity.getComponent(1), 2) + Math.pow(this.velocity.getComponent(2), 2));
+          // AFRAME.log(this.speed);
+
+          this.lastPosition.copy(this.el.object3D.position);
+          this.lastSpeed = this.speed;
+
+        },
+        tick: function(){
+          this.throttledFunction();  // Called once a second.
+        },
+      });
+
+      // hack for orbit-controls and look-at component to play nicely together https://github.com/supermedium/superframe/issues/200
+      AFRAME.registerComponent('orbit-look-at-hack', {
+        tick: function () {
+          lookCubeHack.setAttribute('position', mainCamHack.getObject3D('camera').position);
+        }
+      });
+
+  </script>
+
+  </head>
+  <body>
+    <a-scene log="console: false" stats background="color: #ECECEC">
+      <a-assets>
+        <a-mixin id="bounce"
+        animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
+        animation__2="property: object3D.position.y; easing: linear; from: 0.2; to: 1; dir: alternate; dur: 250; loop: true"></a-mixin>
+        <a-mixin id="peep1" scale="0.1 0.1 0.1" obj-model="obj: url(models/city-builder-obj/chr_worker1.obj); mtl: url(models/city-builder-obj/chr_worker1.mtl)"></a-mixin>
+        <a-mixin id="peep2" scale="0.1 0.1 0.1" obj-model="obj: url(models/city-builder-obj/chr_worker2.obj); mtl: url(models/city-builder-obj/chr_worker2.mtl)"></a-mixin>
+        <a-mixin id="peep3" scale="0.1 0.1 0.1" obj-model="obj: url(models/city-builder-obj/chr_worker3.obj); mtl: url(models/city-builder-obj/chr_worker3.mtl)"></a-mixin>
+        <img id="destination-queens" src="images/Q9ALimitedOrangeLED.gif" />
+        <img id="sky" src="images/sky3.jpg" />
+        <script id="bustemplate" type="text/html">
+          <a-plane class="bus-front" src="url(images/bus-front.png)" material="alphaTest: 0.5;" position="0 0.181 5.979" rotation="-8 0 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
+          <a-plane class="bus-top" src="url(images/bus-top-4278.png)" material="alphaTest: 0.5;" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow="receive:false"></a-plane>
+          <a-plane class="bus-right" src="url(images/bus-right.png)" material="alphaTest: 0.5;" position="-1.295 0 0" rotation="0 -90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
+          <a-plane class="bus-left" src="url(images/bus-left.png)"  material="alphaTest: 0.5;" position="1.295 0 0" rotation="0 90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
+          <a-plane class="bus-back" src="url(images/bus-back.png)" material="alphaTest: 0.5;" position="0 0.181 -6.040" rotation="0 180 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
+          <a-plane class="bus-shadow" src="url(images/bus-shadow.png)" material="alphaTest: 0.5;transparent:true;metalness:1;roughness:1;" position="0 -1.489 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" scale="1.2 1.2 0"></a-plane>
+          <a-plane class="destination-led-front" position="0 1.23 5.84" rotation="-7.2 0 0" height="0.19" width="1.66" material="shader:gif;src:#destination-queens;"></a-plane>
+          <a-plane class="destination-led-side" position="-1.3 0.98 3.75" rotation="0 -90 0" height="0.15" width="1.32" material="shader:gif;src:#destination-queens;"></a-plane>
+          <a-text class="destination-led-back" position="-0.44 1.34 -6.06" value="Q9A" color="#ffbf00" text="font:dejavu" rotation="0 180 0" scale="0.9 0.9 0.9"></a-text>
+          <a-image class="lensflare-headlight-left" src="url(images/light_PNG14436.png)" material="alphaTest:0" position="1.08 -0.72 6.18" scale="1.5 1.5 0"></a-image>
+          <a-image class="lensflare-headlight-right" src="url(images/light_PNG14436.png)" material="alphaTest:0" position="-1.11 -0.72 6.18" scale="1.5 1.5 0"></a-image>
+          <a-image class="lensflare-tail-light-left" src="url(images/tail-light.png)" position="1.07 -0.16 -6.06" rotation="0 180 0" scale="2 2 0"></a-image>
+          <a-image class="lensflare-tail-light-right" src="url(images/tail-light.png)" position="-1.08 -0.16 -6.06" rotation="0 180 0" scale="2 2 0"></a-image>
+          <a-entity class="light-tail-light-right" light="type:spot;angle:17.35;penumbra:0.39;color:#ff0000;intensity:5.5;distance:20" position="-1.1 -0.8 -4.22"></a-entity>
+          <a-entity class="light-tail-light-left" light="type:spot;angle:17.35;penumbra:0.39;color:#ff0000;intensity:5.5;distance:20" position="1.1 -0.8 -4.22"></a-entity>
+          <a-entity class="light-headlight-left" light="type:spot;angle:17.35;penumbra:0.39;color:#ffffff;intensity:14.2;distance:20" rotation="0 180 0" position="1.1 -0.9 4.82"></a-entity>
+          <a-entity class="light-headlight-right" light="type:spot;angle:17.35;penumbra:0.39;color:#ffffff;intensity:14.2;distance:20" rotation="0 180 0" position="-1.1 -0.9 4.82"></a-entity>
+        </script>
+        <a-asset-item id="new-bus" src="models/new-bus/GLTF/BUS.gltf"></a-asset-item>
+      </a-assets>
+
+      <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 28 0"> </a-entity>
+      <a-entity id="lookCubeHack" orbit-look-at-hack geometry="" static-body="shape: box" position="0 0 0" scale="1 1 1"></a-entity>
+
+      <a-entity id="game-world" bind__scale="computedScaleString">
+        <a-entity environment="seed: 8;
+          skyType: gradient;
+          skyColor: #24b5ff;
+          horizonColor: #eff9f7;
+          lighting: distant;
+          lightPosition: { x: -1.2, y: 0.88, z: -0.55};
+          fog: false;
+          flatShading: false;
+          ground: noise;
+          groundTexture: squares;
+          groundColor: #939a24;
+          groundColor2: #989d2e;
+          dressing: trees;
+          dressingAmount: 200;
+          dressingColor: #888b1d;
+          dressingScale: 4.5;
+          dressingOnPlayArea: false;
+          grid: none;
+          gridColor: #c5a543;
+          shadow: false" position="0 -0.1 0" scale="8 8 8"></a-entity>
+
+
+
+        <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10">
+          <a-text class="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
+          <a-ring class="bus-door-marker" color="cyan" position="2 0.5 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
+          board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity; distance: computedDistance"
+          alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps; distance: computedDistance"></a-ring>
+          <a-entity class="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
+          <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
+          <a-entity class="bus-model" template="src: #bustemplate" position="0 1.5 0" rotation="0 180 0" ></a-entity>
+        </a-entity>
+
+        <!-- <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
+        <!-- <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
+        <!-- <a-entity id="bus4" template="src: #bustemplate" position="-6.3 1.5 40" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity> -->
+
+        <a-entity class="model-streetlight" gltf-model="models/streetlightmodel.gltf" position="-3.6 -1.9 8.2" rotation="0 180 0" scale="1.5 1.5 1.5"></a-entity>
+        <a-entity class="light-streetlight" light="type:spot;angle:57.85;penumbra:0.19" position="-3 4.5 7" rotation="-90 0 0"></a-entity>
+
+        <a-entity id="messageboard" position="0 0 -12">
+          <a-entity class="messageboard-pole" gltf-model="models/streetlightmodel.gltf" position="4.5 -1.9 3.4" scale="1.5 1.5 1.5"></a-entity>
+          <a-entity class="messageboard-sign" material="color:black" geometry="depth:0.33;width:3.54" position="1.961 4.160 4.66" ></a-entity>
+          <a-entity clock="font: sourcecodepro; color: #ffbf00; position: 0.381 4.03 4.859"></a-entity>
+          <a-text position="0.381 4.36 4.859" value="Howard St Closed at 3rd" color="#ffbf00" font="monoid"></a-text>
+        </a-entity>
+
+        <a-entity meshline="lineWidth: 2; path: -2 -1 0, 0 -2 0, 2 -1; color: #E20049" position="0 10 0"></a-entity>
+
+        <a-entity id="bus-stop-1" class="bus-stop" position="4.5 0 25">
+          <a-text class="stopPeepsLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
+          <a-entity id="boardingPeep1" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
+          <a-entity id="peepsParent1" draw-stop-peeps="boardingPeepId: boardingPeep1" bind__draw-stop-peeps="stopPeeps: stop1Peeps" position="0 0 -1">
+            <!-- PEEPS GO HERE -->
+            <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
+            <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
+            <a-entity id="tom" mixin="peep3 bounce" position="0 0.2 1" rotation="0 270 0"></a-entity> -->
+          </a-entity>
+          <a-entity class="bus-stop-sidewalk" geometry="primitive:plane;height:5;width:15" position="1.5 0.26 3" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
+          <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.02 3" scale="6 8 6"></a-image>
+          <a-entity class="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
+          <a-entity class="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat"></a-entity>
+          <a-entity id="bus-stop-1-marker" bind__visible="stop1Peeps !== 0" position="-2.536 0.5 -0.932">
+            <a-ring class="marker-pulsating" color="yellow"
+            animation__1="property: radius-inner; from: 2; to: 7; dir: alternate; dur: 1000; loop: true"
+            animation__2="property: radius-outer; from: 2.2; to: 9; dir: alternate; dur: 1000; loop: true"
+            rotation="-90 0 0" material="shader:flat" radius-inner="3" radius-outer="4" ></a-ring>
+            <a-ring class="marker-door-zone" color="yellow" rotation="-90 0 0" material="shader:flat" radius-inner="1.8" radius-outer="2" ></a-ring>
+          </a-entity>
+        </a-entity>
+
+        <a-entity id="bus-stop-2" class="bus-stop" position="4.5 0 -30">
+          <a-text class="stopPeepsLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop2Peeps" color="yellow" font="aileronsemibold"></a-text>
+          <a-entity id="alightingPeep2" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 90 0"></a-entity>
+          <a-entity id="peepsParent2" draw-stop-peeps="boardingPeepId: alightingPeep2" bind__draw-stop-peeps="stopPeeps: stop2Peeps" position="0 0 -1">
+            <!-- PEEPS GO HERE -->
+            <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
+            <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
+            <a-entity id="tom" mixin="peep3 bounce" position="0 0.2 1" rotation="0 270 0"></a-entity> -->
+          </a-entity>
+          <a-entity class="bus-stop-sidewalk" geometry="primitive:plane;height:5;width:15" position="1.5 0.26 3" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
+          <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.02 3" scale="6 8 6"></a-image>
+          <a-entity class="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
+          <a-entity class="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat"></a-entity>
+          <a-entity id="bus-stop-2-marker" bind__visible="stop2Peeps !== 0" position="-2.536 0.5 -0.932">
+            <a-ring class="marker-pulsating" color="yellow"
+            animation__1="property: radius-inner; from: 2; to: 7; dir: alternate; dur: 1000; loop: true"
+            animation__2="property: radius-outer; from: 2.2; to: 9; dir: alternate; dur: 1000; loop: true"
+            rotation="-90 0 0" material="shader:flat" radius-inner="3" radius-outer="4" ></a-ring>
+            <a-ring class="marker-door-zone" color="yellow" rotation="-90 0 0" material="shader:flat" radius-inner="1.8" radius-outer="2" ></a-ring>
+          </a-entity>
+        </a-entity>
+
+        <a-entity id="lane-northbound">
+          <a-entity class="street" position="2.2 0.25 0" rotation="90 0 0" scale="0.5 0.5 0.5">
+            <a-entity gltf-model="models/street-7aKNh-4MGdK/scene.gltf" scale="0.001 0.001 0.001"></a-entity>
+          </a-entity>
+          <a-entity class="street" position="2.2 0.25 -28.68" rotation="90 0 0" scale="0.5 0.5 0.5">
+            <a-entity gltf-model="models/street-7aKNh-4MGdK/scene.gltf" scale="0.001 0.001 0.001"></a-entity>
+          </a-entity>
+          <a-entity class="street" position="2.2 0.25 28.68" rotation="90 0 0" scale="0.5 0.5 0.5">
+            <a-entity gltf-model="models/street-7aKNh-4MGdK/scene.gltf" scale="0.001 0.001 0.001"></a-entity>
+          </a-entity>
+        </a-entity>
+
+        <a-entity id="lane-southbound" position="-6.3 0 0" rotation="0 180 0">
+          <a-entity class="street" position="2.2 0.25 0" rotation="90 0 0" scale="0.5 0.5 0.5">
+            <a-entity gltf-model="models/street-7aKNh-4MGdK/scene.gltf" scale="0.001 0.001 0.001"></a-entity>
+          </a-entity>
+          <a-entity class="street" position="2.2 0.25 -28.68" rotation="90 0 0" scale="0.5 0.5 0.5">
+            <a-entity gltf-model="models/street-7aKNh-4MGdK/scene.gltf" scale="0.001 0.001 0.001"></a-entity>
+          </a-entity>
+          <a-entity class="street" position="2.2 0.25 28.68" rotation="90 0 0" scale="0.5 0.5 0.5">
+            <a-entity gltf-model="models/street-7aKNh-4MGdK/scene.gltf" scale="0.001 0.001 0.001"></a-entity>
+          </a-entity>
+        </a-entity>
+
+        <a-entity id="median" geometry="primitive:plane;height:1.3;width:85.9" position="-3.08 0.26 0" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:30 1;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
+        <a-entity light="intensity:0.6;castShadow:true" position="-0.5 1 1"></a-entity>
+        <a-entity id="ambient" light="color:#BBB;type:ambient;intensity:0.1"></a-entity>
+      </a-entity> <!-- closing game-world entity -->
+    </a-scene>
+  </body>
+</html>
