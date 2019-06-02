@@ -27,37 +27,24 @@
           stop1Peeps: 10,
           stop2Peeps: 0
         },
-
         handlers: {
           decreaseBus1Peeps: function (state, action) {
             state.bus1Peeps -= 1;
-            // if < 0 then make 0 (or throw exception?)
           },
-
           increaseBus1Peeps: function (state, action) {
             state.bus1Peeps += 1;
-            // stop at bus capacity
-            // if state.busPeeps > action.capacity {state.busPeeps = action.capacity }
           },
-
           decreaseStop1Peeps: function (state, action) {
             state.stop1Peeps -= 1;
-            // if < 0 then make 0 (or throw exception?)
           },
-
           increaseStop1Peeps: function (state, action) {
             state.stop1Peeps += 1;
-            // to what limit?
           },
-
           increaseStop2Peeps: function (state, action) {
             state.stop2Peeps += 1;
-            // to what limit?
           }
-
         }
       });
-
 
       // handle visual display of bus stop peeps based on number of peeps
       AFRAME.registerComponent('draw-stop-peeps', {
