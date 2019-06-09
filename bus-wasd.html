@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/gh/mayognaise/aframe-gif-shader/dist/aframe-gif-shader.min.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-slice9-component/dist/aframe-slice9-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-orbit-controls@1.2.0/dist/aframe-orbit-controls.min.js"></script>
     <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
     <script src="https://unpkg.com/aframe-log-component/dist/aframe-log-component.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
@@ -265,13 +264,6 @@
         },
       });
 
-      // hack for orbit-controls and look-at component to play nicely together https://github.com/supermedium/superframe/issues/200
-      AFRAME.registerComponent('orbit-look-at-hack', {
-        tick: function () {
-          lookCubeHack.setAttribute('position', mainCamHack.getObject3D('camera').position);
-        }
-      });
-
   </script>
 
   </head>
@@ -308,9 +300,6 @@
         <a-asset-item id="new-bus" src="models/new-bus/GLTF/BUS.gltf"></a-asset-item>
       </a-assets>
 
-      <a-entity id="mainCamHack" orbit-controls="target: 0.0001 0 0; minDistance: 0.5; maxDistance: 180; initialPosition: 0 28 0"> </a-entity>
-      <a-entity id="lookCubeHack" orbit-look-at-hack geometry="" static-body="shape: box" position="0 0 0" scale="1 1 1"></a-entity>
-
       <a-entity id="game-world" bind__scale="computedScaleString">
         <a-entity environment="seed: 8;
           skyType: gradient;
@@ -336,11 +325,11 @@
 
 
         <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10">
-          <a-text class="busPeepsLabel" look-at="#lookCubeHack" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
+          <a-text class="busPeepsLabel" look-at="[camera]" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
           <a-ring class="bus-door-marker" color="cyan" position="2 0.5 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
           board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity; distance: computedDistance"
           alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps; distance: computedDistance"></a-ring>
-          <a-entity class="log" look-at="#lookCubeHack" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
+          <a-entity class="log" look-at="[camera]" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
           <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
           <!-- <a-entity class="bus-model" template="src: #bustemplate" position="0 1.5 0" rotation="0 180 0" > -->
           <a-entity class="bus-model" position="0 1.5 0" rotation="0 180 0" >
@@ -383,7 +372,7 @@
         <a-entity meshline="lineWidth: 2; path: -2 -1 0, 0 -2 0, 2 -1; color: #E20049" position="0 10 0"></a-entity>
 
         <a-entity id="bus-stop-1" class="bus-stop" position="4.5 0 25">
-          <a-text class="stopPeepsLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
+          <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
           <a-entity id="boardingPeep1" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
           <a-entity id="peepsParent1" draw-stop-peeps="boardingPeepId: boardingPeep1" bind__draw-stop-peeps="stopPeeps: stop1Peeps" position="0 0 -1">
             <!-- PEEPS GO HERE -->
@@ -405,7 +394,7 @@
         </a-entity>
 
         <a-entity id="bus-stop-2" class="bus-stop" position="4.5 0 -30">
-          <a-text class="stopPeepsLabel" look-at="#lookCubeHack" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop2Peeps" color="yellow" font="aileronsemibold"></a-text>
+          <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop2Peeps" color="yellow" font="aileronsemibold"></a-text>
           <a-entity id="alightingPeep2" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 90 0"></a-entity>
           <a-entity id="peepsParent2" draw-stop-peeps="boardingPeepId: alightingPeep2" bind__draw-stop-peeps="stopPeeps: stop2Peeps" position="0 0 -1">
             <!-- PEEPS GO HERE -->
