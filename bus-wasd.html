@@ -414,7 +414,7 @@
           <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.02 3" scale="6 8 6"></a-image>
           <a-entity class="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
           <a-entity class="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat"></a-entity>
-          <a-entity id="bus-stop-2-marker" bind__visible="stop2Peeps !== 0" position="-2.536 0.5 -0.932">
+          <a-entity id="bus-stop-2-marker" bind__visible="bus1Peeps > 0" position="-2.536 0.5 -0.932">
             <a-ring class="marker-pulsating" color="yellow"
             animation__1="property: radius-inner; from: 2; to: 7; dir: alternate; dur: 1000; loop: true"
             animation__2="property: radius-outer; from: 2.2; to: 9; dir: alternate; dur: 1000; loop: true"
