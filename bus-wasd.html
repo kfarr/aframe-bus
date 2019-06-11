@@ -302,11 +302,13 @@
         </script> -->
         <a-asset-item id="new-bus" src="models/new-bus/GLTF/BUS.gltf"></a-asset-item>
         <a-asset-item id="vive-tracker" src="models/tracker/HTC_Vive_Tracker.gltf"></a-asset-item>
-
       </a-assets>
 
-      <a-entity tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0" position-log>
-        <a-entity gltf-model="#vive-tracker" rotation="0 180 0" scale="0.001 0.001 0.001"></a-entity>
+      <a-entity camera look-controls position="0 1.6 0"></a-entity>
+
+      <!-- <a-entity id="bus1-controller" tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0" position-log> -->
+      <a-entity id="bus1-controller" position-log>
+        <a-entity gltf-model="#vive-tracker" visible="false" rotation="0 180 0" scale="0.001 0.001 0.001"></a-entity>
         <!-- <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10"> -->
         <a-entity id="bus1" position="0 -0.065 -0.045" bind__scale="computedScaleString">
           <a-text class="busPeepsLabel" look-at="[camera]" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
@@ -359,9 +361,6 @@
           grid: none;
           gridColor: #c5a543;
           shadow: false" position="0 -0.1 0" scale="8 8 8"></a-entity>
-
-
-
 
         <!-- <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
         <!-- <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
@@ -452,5 +451,27 @@
         <a-entity id="ambient" light="color:#BBB;type:ambient;intensity:0.1"></a-entity>
       </a-entity> <!-- closing game-world entity -->
     </a-scene>
+    <script>
+      console.log("Run `makeWASD();` if you need to use a keyboard without a WebVR browser.");
+      function makeWASD() {
+        // find bus object - make it located reasonable location // detach tracker binding?
+        var controllerEl = document.querySelector("#bus1-controller");
+        controllerEl.removeAttribute("tracked-controls");
+        controllerEl.setAttribute("position", "0 0.1 0");
+        controllerEl.setAttribute("wasd-controls", "acceleration: 6");
+      }
+      function makeVR() {
+        // add tracked controller to above thing
+        //    tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0"
+        var controllerEl = document.querySelector("#bus1-controller");
+        controllerEl.setAttribute("tracked-controls", "idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0");
+        document.querySelector("#tracker-model").visible = true;
+      }
+
+      document.querySelector('a-scene').addEventListener('enter-vr', function () {
+         console.log("ENTERED VR");
+         makeVR();
+      });
+    </script>
   </body>
 </html>
