@@ -26,7 +26,8 @@
           bus1Peeps: 0,
           bus1Capacity: 10,
           stop1Peeps: 10,
-          stop2Peeps: 0
+          stop2Peeps: 0,
+          bus1Controller: 2,
         },
         handlers: {
           decreaseBus1Peeps: function (state, action) {
@@ -464,7 +465,8 @@
         // add tracked controller to above thing
         //    tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0"
         var controllerEl = document.querySelector("#bus1-controller");
-        controllerEl.setAttribute("tracked-controls", "idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0");
+        controllerEl.setAttribute("tracked-controls", "idPrefix: OpenVR; orientationOffset:-90 180 0");
+        controllerEl.setAttribute("bind__tracked-controls", "controller: bus1Controller");
         document.querySelector("#tracker-model").setAttribute("visible", "true");
       }
 
