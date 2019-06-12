@@ -315,16 +315,16 @@
 
       <!-- <a-entity id="bus1-controller" tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0" position-log> -->
       <a-entity id="bus1-controller" position-log>
-        <a-entity id="tracker-model" gltf-model="#vive-tracker" visible="false" rotation="0 180 0" scale="0.001 0.001 0.001"></a-entity>
+        <a-entity id="tracker-model" gltf-model="#vive-tracker" visible="false" rotation="0 0 0" scale="0.001 0.001 0.001"></a-entity>
         <!-- <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10"> -->
-        <a-entity id="bus1" position="0 -0.065 -0.045" bind__scale="computedScaleString">
+        <a-entity id="bus1" position="0 -0.065 0.045" bind__scale="computedScaleString">
           <a-text class="busPeepsLabel" look-at="[camera]" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
           <a-ring class="bus-door-marker" color="cyan" position="-2 -1.25 5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
           board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity; distance: computedDistance"
           alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps; distance: computedDistance"></a-ring>
           <a-entity class="log" look-at="[camera]" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
           <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
-          <a-entity class="bus-model" template="src: #bustemplate" position="0 0 0" rotation="0 0 0" ></a-entity>
+          <a-entity class="bus-model" template="src: #bustemplate" position="0 0 0" rotation="0 180 0" ></a-entity>
         </a-entity>
       </a-entity>
 
@@ -452,7 +452,7 @@
         // add tracked controller to above thing
         //    tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0"
         var controllerEl = document.querySelector("#bus1-controller");
-        controllerEl.setAttribute("tracked-controls", "idPrefix: OpenVR; orientationOffset:-90 180 0");
+        controllerEl.setAttribute("tracked-controls", "idPrefix: OpenVR; orientationOffset:-90 0 0");
         controllerEl.setAttribute("bind__tracked-controls", "controller: bus1ControllerId");
         document.querySelector("#tracker-model").setAttribute("visible", "true");
       }
