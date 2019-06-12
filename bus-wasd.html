@@ -308,7 +308,7 @@
 
       <!-- <a-entity id="bus1-controller" tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0" position-log> -->
       <a-entity id="bus1-controller" position-log>
-        <a-entity gltf-model="#vive-tracker" visible="false" rotation="0 180 0" scale="0.001 0.001 0.001"></a-entity>
+        <a-entity id="tracker-model" gltf-model="#vive-tracker" visible="false" rotation="0 180 0" scale="0.001 0.001 0.001"></a-entity>
         <!-- <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10"> -->
         <a-entity id="bus1" position="0 -0.065 -0.045" bind__scale="computedScaleString">
           <a-text class="busPeepsLabel" look-at="[camera]" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
@@ -465,7 +465,7 @@
         //    tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0"
         var controllerEl = document.querySelector("#bus1-controller");
         controllerEl.setAttribute("tracked-controls", "idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0");
-        document.querySelector("#tracker-model").visible = true;
+        document.querySelector("#tracker-model").setAttribute("visible", "true");
       }
 
       document.querySelector('a-scene').addEventListener('enter-vr', function () {
