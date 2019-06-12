@@ -288,7 +288,7 @@
         <a-mixin id="peep3" scale="0.1 0.1 0.1" obj-model="obj: url(models/city-builder-obj/chr_worker3.obj); mtl: url(models/city-builder-obj/chr_worker3.mtl)"></a-mixin>
         <img id="destination-queens" src="images/Q9ALimitedOrangeLED.gif" />
         <img id="sky" src="images/sky3.jpg" />
-        <!-- <script id="bustemplate" type="text/html">
+        <script id="bustemplate" type="text/html">
           <a-plane class="bus-front" src="url(images/bus-front.png)" material="alphaTest: 0.5;" position="0 0.181 5.979" rotation="-8 0 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
           <a-plane class="bus-top" src="url(images/bus-top-4278.png)" material="alphaTest: 0.5;" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow="receive:false"></a-plane>
           <a-plane class="bus-right" src="url(images/bus-right.png)" material="alphaTest: 0.5;" position="-1.295 0 0" rotation="0 -90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
@@ -306,7 +306,7 @@
           <a-entity class="light-tail-light-left" light="type:spot;angle:17.35;penumbra:0.39;color:#ff0000;intensity:5.5;distance:20" position="1.1 -0.8 -4.22"></a-entity>
           <a-entity class="light-headlight-left" light="type:spot;angle:17.35;penumbra:0.39;color:#ffffff;intensity:14.2;distance:20" rotation="0 180 0" position="1.1 -0.9 4.82"></a-entity>
           <a-entity class="light-headlight-right" light="type:spot;angle:17.35;penumbra:0.39;color:#ffffff;intensity:14.2;distance:20" rotation="0 180 0" position="-1.1 -0.9 4.82"></a-entity>
-        </script> -->
+        </script>
         <a-asset-item id="new-bus" src="models/new-bus/GLTF/BUS.gltf"></a-asset-item>
         <a-asset-item id="vive-tracker" src="models/tracker/HTC_Vive_Tracker.gltf"></a-asset-item>
       </a-assets>
@@ -324,26 +324,7 @@
           alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps; distance: computedDistance"></a-ring>
           <a-entity class="log" look-at="[camera]" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
           <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
-          <!-- <a-entity class="bus-model" template="src: #bustemplate" position="0 1.5 0" rotation="0 180 0" > -->
-          <a-entity class="bus-model" position="0 0 0" rotation="0 0 0" >
-            <a-plane class="bus-front" src="url(images/bus-front.png)" material="alphaTest: 0.5;transparent:true;" position="0 0.181 5.979" rotation="-8 0 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
-            <a-plane class="bus-top" src="url(images/bus-top-4278.png)" material="alphaTest: 0.5;transparent:true;" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow="receive:false"></a-plane>
-            <a-plane class="bus-right" src="url(images/bus-right.png)" material="alphaTest: 0.5;transparent:true;" position="-1.295 0 0" rotation="0 -90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
-            <a-plane class="bus-left" src="url(images/bus-left.png)"  material="alphaTest: 0.5;transparent:true;" position="1.295 0 0" rotation="0 90 0" width="12.459" height="3.001" shadow="receive:false"></a-plane>
-            <a-plane class="bus-back" src="url(images/bus-back.png)" material="alphaTest: 0.5;transparent:true;" position="0 0.181 -6.040" rotation="0 180 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
-            <a-plane class="bus-shadow" src="url(images/bus-shadow.png)" material="alphaTest: 0.5;transparent:true;metalness:1;roughness:1;" position="0 -1.489 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" scale="1.2 1.2 0"></a-plane>
-            <a-plane class="destination-led-front" position="0 1.23 5.84" rotation="-7.2 0 0" height="0.19" width="1.66" material="shader:gif;src:#destination-queens;"></a-plane>
-            <a-plane class="destination-led-side" position="-1.3 0.98 3.75" rotation="0 -90 0" height="0.15" width="1.32" material="shader:gif;src:#destination-queens;"></a-plane>
-            <a-text class="destination-led-back" position="-0.44 1.34 -6.06" value="Q9A" color="#ffbf00" text="font:dejavu" rotation="0 180 0" scale="0.9 0.9 0.9"></a-text>
-            <a-image class="lensflare-headlight-left" src="url(images/light_PNG14436.png)" material="alphaTest:0" position="1.08 -0.72 6.18" scale="1.5 1.5 0"></a-image>
-            <a-image class="lensflare-headlight-right" src="url(images/light_PNG14436.png)" material="alphaTest:0" position="-1.11 -0.72 6.18" scale="1.5 1.5 0"></a-image>
-            <a-image class="lensflare-tail-light-left" src="url(images/tail-light.png)" position="1.07 -0.16 -6.06" rotation="0 180 0" scale="2 2 0"></a-image>
-            <a-image class="lensflare-tail-light-right" src="url(images/tail-light.png)" position="-1.08 -0.16 -6.06" rotation="0 180 0" scale="2 2 0"></a-image>
-            <a-entity class="light-tail-light-right" light="type:spot;angle:17.35;penumbra:0.39;color:#ff0000;intensity:5.5;distance:20" position="-1.1 -0.8 -4.22"></a-entity>
-            <a-entity class="light-tail-light-left" light="type:spot;angle:17.35;penumbra:0.39;color:#ff0000;intensity:5.5;distance:20" position="1.1 -0.8 -4.22"></a-entity>
-            <a-entity class="light-headlight-left" light="type:spot;angle:17.35;penumbra:0.39;color:#ffffff;intensity:14.2;distance:20" rotation="0 180 0" position="1.1 -0.9 4.82"></a-entity>
-            <a-entity class="light-headlight-right" light="type:spot;angle:17.35;penumbra:0.39;color:#ffffff;intensity:14.2;distance:20" rotation="0 180 0" position="-1.1 -0.9 4.82"></a-entity>
-          </a-entity>
+          <a-entity class="bus-model" template="src: #bustemplate" position="0 0 0" rotation="0 0 0" ></a-entity>
         </a-entity>
       </a-entity>
 
