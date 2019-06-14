@@ -46,7 +46,6 @@
 
           if (peepsDelta === 1) {
             document.getElementById(this.data.boardingPeepId).removeAttribute("animation__alight");
-            document.getElementById(this.data.boardingPeepId).setAttribute("visible", true);
             document.getElementById(this.data.boardingPeepId).setAttribute("animation__alight", "property: object3D.position.x; easing: linear; from: -4; to: 0; dur: 1000");
             if (this.myTimer) {
               clearTimeout(this.myTimer);
@@ -54,7 +53,6 @@
             var that = this;
             this.myTimer = setTimeout(
               function() {
-                document.getElementById(that.data.boardingPeepId).setAttribute("visible", false);
                 that.removePeeps()
                 that.buildPeeps()
               }, 1000);
@@ -65,17 +63,7 @@
           this.buildPeeps()
 
           if (peepsDelta === -1) {
-            document.getElementById(this.data.boardingPeepId).removeAttribute("animation__board");
-            document.getElementById(this.data.boardingPeepId).setAttribute("visible", true);
-            document.getElementById(this.data.boardingPeepId).setAttribute("animation__board", "property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 1000");
-            if (this.myTimer) {
-              clearTimeout(this.myTimer);
-            }
-            var that = this;
-            this.myTimer = setTimeout(
-              function() {
-                document.getElementById(that.data.boardingPeepId).setAttribute("visible", false);
-              }, 1000);
+            document.getElementById(this.data.boardingPeepId).emit('startBoarding');
             }
         },
         remove: function () {
@@ -437,7 +425,10 @@
 
         <a-entity id="bus-stop-1" class="bus-stop" position="4.5 0 25">
           <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
-          <a-entity id="boardingPeep1" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
+          <a-entity id="boardingPeep1" visible="true" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"
+            animation__board="property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 900; startEvents: startBoarding"
+            animation__flee="property: object3D.position.x; easing: linear; from: -4; to: 999; dur: 1; startEvents: animationcomplete__board"
+          ></a-entity>
           <a-entity id="peepsParent1" draw-stop-peeps="boardingPeepId: boardingPeep1" bind__draw-stop-peeps="stopPeeps: stop1Peeps" position="0 0 -1">
             <!-- PEEPS GO HERE -->
             <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
@@ -459,7 +450,7 @@
 
         <a-entity id="bus-stop-2" class="bus-stop" position="4.5 0 -30">
           <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop2Peeps" color="yellow" font="aileronsemibold"></a-text>
-          <a-entity id="alightingPeep2" visible="false" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 90 0"></a-entity>
+          <a-entity id="alightingPeep2" visible="true" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 90 0"></a-entity>
           <a-entity id="peepsParent2" draw-stop-peeps="boardingPeepId: alightingPeep2" bind__draw-stop-peeps="stopPeeps: stop2Peeps" position="0 0 -1">
             <!-- PEEPS GO HERE -->
             <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
