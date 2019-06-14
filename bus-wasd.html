@@ -319,7 +319,7 @@
         <!-- <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10"> -->
         <a-entity id="bus1" position="0 -0.065 0.045" bind__scale="computedScaleString">
           <a-text class="busPeepsLabel" look-at="[camera]" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
-          <a-ring class="bus-door-marker" color="cyan" position="-2 -1.25 5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
+          <a-ring class="bus-door-marker" color="cyan" position="2 -1.25 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
           board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity; distance: computedDistance"
           alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps; distance: computedDistance"></a-ring>
           <a-entity class="log" look-at="[camera]" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
