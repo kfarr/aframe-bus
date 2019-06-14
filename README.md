@@ -1,3 +1,6 @@
+# Known good running Exokit master commit SHA:
+23f898c2a2df9de7473a55deb78a691542b0eddc
+
 # aframe-bus
 Experiment to make a city "paper" bus in XR form
 
