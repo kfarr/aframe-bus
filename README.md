@@ -1,12 +1,21 @@
-# Known good running Exokit master commit SHA:
-23f898c2a2df9de7473a55deb78a691542b0eddc
-
 # aframe-bus
-Experiment to make a city "paper" bus in XR form
+This experiment originally started to make a city "paper" bus in XR form inspired by #Codevember 2018. It eventually morphed into a more complicated project.
 
-Inspired by #Codevember 2018
+## Running bus tracker broadcaster app in exokit:
+Tested on Windows 10 PC
+0) Clone this repo
+1) Open a command shell in this repo's root directory and run:
+`http-server` (install with `npm install -g http-server` first if you don't have already)
+2) Note the IP address when you run the above, change broadcast url on your scene to match this on port 12000
+3) Open another command shell in this repo's /server directory and run:
+`node index.js` (after running `npm install` once)
+4) Open yet another command shell in your exokit directory (install exokit last known good 3f6085fcbdeae1d857444f5481e823eccc5fef15) run:
+`node . -x webvr http://localhost:8080/bus-server.html`
+5) On another machine, use the IP address noted in (1) and open [localip]:8080/bus-broadcast.html in any browser. Do not enter VR mode, instead use browser Fullscreen to stretch 3d view to full edges.
 
-## Quick links
+## Quick links to Codevember 2018 static pages
+* https://kfarr.github.io/aframe-bus/index.html
+* https://kfarr.github.io/aframe-bus/index-night.html
 * https://kfarr.github.io/aframe-bus/codevember-02-time.html
 * https://kfarr.github.io/aframe-bus/codevember-03-carrot.html
 * https://kfarr.github.io/aframe-bus/codevember-04-sky.html
@@ -14,47 +23,28 @@ Inspired by #Codevember 2018
 * https://kfarr.github.io/aframe-bus/codevember-09-green.html
 * https://kfarr.github.io/aframe-bus/codevember-15-fire.html
 
-## 07-sea notes
-* sea 10m below roadway (y = -10)
-* remove other background / environment?
-* superhands
-* grabbable - see sticky example
-* turn off velocity - velocity 0 ?
-* 1:43 scale to match MTA toy bus
-* then try puttin it all together
-* entity reparenting / grabber
+## About the Bus
+1:43 scale NYC MTA Bus Toy:
+https://www.amazon.com/Daron-RT8468-MTA-11-Bus/dp/B00EVQJ5I2
 
-## Real Life Bus Dimensions
-
-Orion Model VII Next Generation
+In Real Life: Orion Model VII Next Generation
 https://cptdb.ca/wiki/index.php/Orion_International_%27Orion_VII%27
 https://en.wikipedia.org/wiki/MTA_Regional_Bus_Operations_bus_fleet (search "Orion VII
 Next Generation" for pictures)
 
 Length 40' 10.5" = 12.459m
-
 Width: 102" = 2.59 m
-
 Height: 118.5” = 3.0099m (not including HVAC or battery, otherwise 132” or 335.28m for full HEV )
 
-1:43 scale NYC MTA Bus Toy:
-https://www.amazon.com/Daron-RT8468-MTA-11-Bus/dp/B00EVQJ5I2
-
 ## "Paper" Model Bus Dimensions
-
 168 - height in px of front from bumper to roof
 186 - height in px of right from bottom of wheels to roof
-
 ratio = 168 / 186 = 0.903225806451613
-
 height of front in m = 3.0099 * 0.903225806 = 2.7186
 and move up 0.2913m
 
-
-
 ## Credits
-
-Besides my code I attempted to source everything in the repo with creative commons content. Most credits and notes below, sorry if I have missed a few.
+Besides my code, art and models, I attempted to source everything in the repo from creative commons, MIT, apache, etc licensed material. Credits and notes below:
 
 trees:
 https://poly.google.com/view/2y-Cl3E7lMf
@@ -122,6 +112,3 @@ https://vimeo.com/stock/clip-298549147-a-white--delivery-truck-with-a-trailer-dr
 
 Caltrain paper bus:
 https://cptdb.ca/topic/9470-papertrain-thread/
-
-More research:
-aframe entity reparenting
