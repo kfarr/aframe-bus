@@ -16,8 +16,10 @@
     <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
     <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
     <script src="https://unpkg.com/aframe-render-order-component@1.0.0/dist/aframe-render-order-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-orbit-controls@1.2.0/dist/aframe-orbit-controls.min.js"></script>
 
-    <script src="lib/aframe-broadcast-component.js"></script>
+    <script src="js/aframe-broadcast-component.js"></script>
+    <script src="js/ortho.js"></script>
 
     <script src="forward.js"></script>
     <script src="clock.js"></script>
@@ -241,7 +243,9 @@
 
   </head>
   <body>
-    <a-scene log="console: false" stats background="color: #ECECEC" broadcast="url: http://localhost:12000">
+    <a-scene log="console: false" stats background="color: #ECECEC" broadcast="url: http://10.10.7.87:12000">
+      <a-entity camera look-controls position="0 1 0"></a-entity>
+
       <a-assets>
         <a-mixin id="bounce"
         animation__1="property: object3D.rotation.z; easing: linear; from: -45; to: 45; dir: alternate; dur: 500; loop: true"
@@ -300,7 +304,6 @@
         <a-asset-item id="vive-tracker" src="models/tracker/HTC_Vive_Tracker.gltf"></a-asset-item>
       </a-assets>
 
-      <a-entity camera look-controls position="0 1.6 0"></a-entity>
 
       <!-- Menu container. -->
       <a-entity id="menu" position="-1.2 0.63 0.1" visible="" rotation="0 90 0" scale="0.25 0.25 0.25">
@@ -514,6 +517,7 @@
         var cameraEl = document.querySelectorAll("[camera]");
         cameraEl[0].removeAttribute("wasd-controls");
         cameraEl[1].removeAttribute("wasd-controls");
+        AFRAME.scenes[0].setAttribute("orbit-controls", "target: 0 0 0; initialPosition: 0 0.5 0;");
       }
       function makeVR() {
         // add tracked controller to above thing
