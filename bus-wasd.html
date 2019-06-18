@@ -273,7 +273,7 @@
                  animation__mouseenter="property: components.material.material.color; type: color; from: #111; to: #FFF; dur: 200; startEvents: mouseenter"
                  animation__mouseleave="property: components.material.material.color; type: color; from: #FFF; to: #111; dur: 200; startEvents: mouseleave"></a-mixin>
 
-        <!-- Bus Template -->
+        <!-- Bus Template - template component style -->
         <script id="bustemplate" type="text/html">
           <a-plane class="bus-front" src="url(images/bus-front.png)" material="alphaTest: 0.5;" position="0 0.181 5.979" rotation="-8 0 0" width="2.59" height="2.7186" shadow="receive:false"></a-plane>
           <a-plane class="bus-top" src="url(images/bus-top-4278.png)" material="alphaTest: 0.5;" position="0 1.485 -0.1" rotation="-90 -90 0" width="11.879" height="2.59" shadow="receive:false"></a-plane>
@@ -507,6 +507,9 @@
         controllerEl.removeAttribute("tracked-controls");
         controllerEl.setAttribute("position", "0 0.1 0");
         controllerEl.setAttribute("wasd-controls", "acceleration: 6");
+        var cameraEl = document.querySelectorAll("[camera]");
+        cameraEl[0].removeAttribute("wasd-controls");
+        cameraEl[1].removeAttribute("wasd-controls");
       }
       function makeVR() {
         // add tracked controller to above thing
