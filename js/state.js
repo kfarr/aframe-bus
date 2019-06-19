@@ -13,7 +13,7 @@ AFRAME.registerState({
     game: {
       detectionRadius: 2,
       bus1Peeps: 0,
-      bus1Capacity: 10,
+      bus1Capacity: 5,
       stop1Peeps: 10,
       stop2Peeps: 0,
       menu: 'main'
@@ -59,16 +59,16 @@ AFRAME.registerState({
       state.layout.rotationY -= 1;
     },
     increaseLayoutPositionY: function (state, action) {
-      state.layout.positionY += 0.001;
+      state.layout.positionY += 0.01;
     },
     decreaseLayoutPositionY: function (state, action) {
-      state.layout.positionY -= 0.001;
+      state.layout.positionY -= 0.01;
     },
     setServerMode: function (state, action) {
       state.thisDevice.mode = 'server';
     },
     setClientMode: function (state, action) {
-      state.thisDevice.mode = 'server';
+      state.thisDevice.mode = 'client';
     },
   },
   computeState: function (newState, payload) {
