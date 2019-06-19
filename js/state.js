@@ -19,15 +19,7 @@ AFRAME.registerState({
       menu: 'main'
     },
     thisDevice: {
-      mode: 'client',
-    },
-    projector1: {
-      position: "0 1 0",
-      rotation: "0 0 0",
-      width: 2.61,
-      height: 1.65,
-      near: 0.25,
-      far: 2
+      mode: 'client'
     }
   },
 
