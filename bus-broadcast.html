@@ -222,7 +222,7 @@
           this.acceleration = this.speed - this.lastSpeed;
           AFRAME.log("Acceleration: " + this.acceleration + " m/s^2", 'bus1');
 
-          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.bus1Peeps, 'bus1');
+          AFRAME.log("Passengers: " + AFRAME.scenes[0].systems.state.state.game.bus1Peeps, 'bus1');
 
           // this.speed = Math.sqrt(Math.pow(this.velocity.getComponent(0), 2) + Math.pow(this.velocity.getComponent(1), 2) + Math.pow(this.velocity.getComponent(2), 2));
           // AFRAME.log(this.speed);
@@ -365,7 +365,6 @@
       <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: [raycastable]"></a-entity>
       <a-entity id="rightHand" laser-controls="hand: right" raycaster="objects: [raycastable]"></a-entity>
 
-
       <!-- Bus1 Entity including tracker controller -->
       <!-- <a-entity id="bus1-controller" tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0" position-log> -->
       <a-entity id="bus1-controller" position-log>
@@ -490,6 +489,19 @@
     </a-scene>
     <script>
       console.log("Run `makeWASD();` if you need to use a keyboard without a WebVR browser.");
+
+      function makeProjector() {
+        // find bus object - make it located reasonable location // detach tracker binding?
+        AFRAME.scenes[0].setAttribute("orbit-controls", "target: 0 0 0; initialPosition: 0 0.5 0;");
+        AFRAME.scenes[0].emit('setClientMode');
+      }
+
+      function makeOrtho() {
+        var cameraEl = document.querySelector("[camera]");
+        cameraEl.setAttribute("ortho", "width: 2.61; height 1.65; near: 0.25; far: 5.5");
+        // cameraEl.setAttribute("rotation", "-90 0 0");
+      }
+
       function makeWASD() {
         // find bus object - make it located reasonable location // detach tracker binding?
         var controllerEl = document.querySelector("#bus1-controller");
@@ -498,7 +510,6 @@
         controllerEl.setAttribute("wasd-controls", "acceleration: 6");
         var cameraEl = document.querySelectorAll("[camera]");
         cameraEl[0].removeAttribute("wasd-controls");
-        cameraEl[1].removeAttribute("wasd-controls");
         AFRAME.scenes[0].setAttribute("orbit-controls", "target: 0 0 0; initialPosition: 0 0.5 0;");
         AFRAME.scenes[0].emit('setClientMode');
       }
