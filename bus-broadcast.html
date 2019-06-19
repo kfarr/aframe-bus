@@ -25,7 +25,7 @@
     <script src="clock.js"></script>
 
     <!-- State definition. -->
-    <script src="state.js"></script>
+    <script src="js/state.js"></script>
 
     <!-- Application components. -->
     <script src="button-colors.js"></script>
@@ -316,31 +316,49 @@
           <a-entity id="header" geometry="primitive: plane; width: 5.25; height: 0.625" material="src: #headerImg; transparent: true; shader: flat" position="0 1.56 0.01" render-order="menuitem"></a-entity>
           <a-entity id="game" geometry="primitive: plane; width: 2; height: 2" material="src: #gameImg; transparent: true; shader: flat" position="-1.4 -0.2 0.02" render-order="menuitem"></a-entity>
           <a-entity class="buttons" layout="type: box; columns: 4; marginRow: -0.5" position="-1.39 1 0.02">
-            <a-entity mixin="buttonMain" text="value: |> NOW PLAYING:; color: #53E033" proxy-event="as: menuWeather"></a-entity>
+            <a-entity mixin="buttonMain" text="value: |> CURRENT GAME; color: #53E033" proxy-event="as: menuWeather"></a-entity>
           </a-entity>
           <a-entity class="buttons" layout="type: box; columns: 1; marginRow: -0.5" position="0 1 0.02">
-            <a-entity mixin="buttonMain" text="value: [+..**] CONTROLLERS; color: #e0cb49" proxy-event="as: menuController"></a-entity>
+            <a-entity mixin="buttonMain" text="value: Controls & Setup; color: #e0cb49" proxy-event="as: menuController"></a-entity>
 <!--
             <a-entity mixin="buttonMain" text="value: |> NOW PLAYING; color: #53E033" proxy-event="as: environmentRandomize"></a-entity>
             <a-entity mixin="buttonMain" text="value: /_ ! _\ DIAGNOSTICS; color: #F85333"></a-entity> -->
           </a-entity>
           <a-entity class="buttons" layout="type: box; columns: 1; marginRow: -0.5" position="1.39 1 0.02">
-            <a-entity mixin="buttonMain" text="value: /_ ! _\ DIAGNOSTICS; color: #F85333"></a-entity>
+            <a-entity mixin="buttonMain" text="value: /!\ DIAGNOSTICS; color: #F85333"></a-entity>
           </a-entity>
         </a-entity>
 
         <!-- Control Mapping menu. -->
         <a-entity id="controllerMenu" bind__visible="menu === 'controller'">
-          <a-entity id="controlHeader" text="value: [+..**] controllers; color: #FAFAFA; width: 4; align: center" position="0 1.2 0.01" render-order="menuItem"></a-entity>
+          <a-entity id="controlHeader" text="value: Controls & Setup; color: #FAFAFA; width: 4; align: center" position="0 1.2 0.01" render-order="menuItem"></a-entity>
           <!-- object1 -->
-          <a-entity class="menuKey" text="value: Game Master; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0.7 0.01" render-order="menuItem"></a-entity>
-          <a-entity class="menuValue" text="value: 0; color: #FAFAFA; width: 2.5; align: center" position="0.5 0.7 0.01" render-order="menuItem"></a-entity>
-          <a-entity id="obj1CtlPrev" mixin="pageButton" position="0.25 0.7 0.02" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: obj1CtlPagePrev" bind-toggle__raycastable="menu === 'controller'"></a-entity>
-          <a-entity id="obj1CtlNext" mixin="pageButton" position="0.75 0.7 0.02" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: obj1CtlPAgeNext" bind-toggle__raycastable="menu === 'controller'" ></a-entity>
-          <a-entity class="menuKey" text="value: Bus #1; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0.4 0.01" render-order="menuItem"></a-entity>
-          <a-entity class="menuValue" text="value: wasd; color: #FAFAFA; width: 2.5; align: center" position="0.5 0.4 0.01" render-order="menuItem"></a-entity>
-          <a-entity class="menuKey" text="value: Projector; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0.1 0.01" render-order="menuItem"></a-entity>
-          <a-entity class="menuValue" text="value: 1; color: #FAFAFA; width: 2.5; align: center" position="0.5 0.1 0.01" render-order="menuItem"></a-entity>
+          <a-entity class="row" position="0 0.7 0.01">
+            <a-entity class="menuKey" text="value: Device Mode; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="menuValue" bind__text="value: mode" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+          </a-entity>
+
+          <a-entity class="row" position="0 0.4 0.01">
+            <a-entity class="menuKey" text="value: Bus1 Controller ID; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="menuValue" bind__text="value: bus1ControllerId" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseBus1ControllerId" bind-toggle__raycastable="menu === 'controller'"></a-entity>
+            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseBus1ControllerId" bind-toggle__raycastable="menu === 'controller'" ></a-entity>
+          </a-entity>
+
+          <a-entity class="row" position="0 0.1 0.01">
+            <a-entity class="menuKey" text="value: Game Position Y; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="menuValue" bind__text="value: gamePositionY" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseGamePositionY" bind-toggle__raycastable="menu === 'controller'"></a-entity>
+            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseGamePositionY" bind-toggle__raycastable="menu === 'controller'" ></a-entity>
+          </a-entity>
+
+          <a-entity class="row" position="0 -0.2 0.01">
+            <a-entity class="menuKey" text="value: Game Rotation Y; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="menuValue" bind__text="value: gameRotationY" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseGameRotationY" bind-toggle__raycastable="menu === 'controller'"></a-entity>
+            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseGameRotationY" bind-toggle__raycastable="menu === 'controller'" ></a-entity>
+          </a-entity>
+
         </a-entity>
 
         <!-- Environment menu. -->
@@ -391,7 +409,7 @@
 
 
 
-      <a-entity id="game-world" bind__scale="computedScaleString">
+      <a-entity bind__position="computedPositionString" bind__rotation="computedRotationString" id="game-world" bind__scale="computedScaleString">
         <a-entity environment="seed: 8;
           skyType: gradient;
           skyColor: #24b5ff;
@@ -518,6 +536,7 @@
         cameraEl[0].removeAttribute("wasd-controls");
         cameraEl[1].removeAttribute("wasd-controls");
         AFRAME.scenes[0].setAttribute("orbit-controls", "target: 0 0 0; initialPosition: 0 0.5 0;");
+        AFRAME.scenes[0].emit('setClientMode');
       }
       function makeVR() {
         // add tracked controller to above thing
@@ -527,6 +546,8 @@
         controllerEl.setAttribute("bind__tracked-controls", "controller: bus1ControllerId");
         document.querySelector("#tracker-model").setAttribute("visible", "true");
         controllerEl.setAttribute("broadcast", "send: position, rotation");
+
+        AFRAME.scenes[0].emit('setServerMode');
       }
 
       document.querySelector('a-scene').addEventListener('enter-vr', function () {
