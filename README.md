@@ -8,7 +8,7 @@ Tested on Windows 10 PC
 `http-server` (install with `npm install -g http-server` first if you don't have already)
 2) Note the IP address when you run the above, change broadcast url on your scene to match this on port 12000
 3) Open another command shell in this repo's /server directory and run:
-`node index.js` (after running `npm install` once)
+`npm start` (after running `npm install` once)
 4) Open yet another command shell in your exokit directory (install exokit last known good 3f6085fcbdeae1d857444f5481e823eccc5fef15) run:
 `node . -x webvr http://localhost:8080/bus-server.html`
 5) On another machine, use the IP address noted in (1) and open [localip]:8080/bus-broadcast.html in any browser. Do not enter VR mode, instead use browser Fullscreen to stretch 3d view to full edges.

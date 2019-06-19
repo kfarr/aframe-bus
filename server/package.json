@@ -4,7 +4,8 @@
   "description": "Simple multiuser server for WebVR that syncs position and rotation of entities via WebSockets.",
   "main": "index.js",
   "scripts": {
-    "start": "forever start index.js",
+    "start": "node index.js",
+    "forever": "forever start index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
