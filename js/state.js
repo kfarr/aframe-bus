@@ -53,7 +53,7 @@ AFRAME.registerState({
       state.controls.bus1ControllerId -= 1;
     },
     increaseLayoutRotationY: function (state, action) {
-      state.layout.RotationY += 1;
+      state.layout.rotationY += 1;
     },
     decreaseLayoutRotationY: function (state, action) {
       state.layout.rotationY -= 1;
