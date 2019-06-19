@@ -242,6 +242,7 @@
   </head>
   <body>
     <a-scene log="console: false" stats background="color: #ECECEC" broadcast="url: http://10.10.7.87:12000">
+      <!-- note: camera is placed here against best practices because of https://github.com/aframevr/aframe/issues/3921 -->
       <a-entity camera look-controls position="0 1 0"></a-entity>
 
       <a-assets>
@@ -304,7 +305,7 @@
 
 
       <!-- Menu container. -->
-      <a-entity id="menu" position="-1.2 0.63 0.1" visible="" rotation="0 90 0" scale="0.25 0.25 0.25">
+      <a-entity id="menu" position="0 1 -0.75" rotation="0 0 0" scale="0.25 0.25 0.25">
         <a-entity id="menuBackground" mixin="slice" slice9="height: 3; width: 5.3333" render-order="menuBackground"></a-entity>
         <a-entity id="menuBack" mixin="pageButton" scale="1.5 1.5 1.5" position="-0.8 1.15 0.02" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: menuBack" bind-toggle__raycastable="game.menu !== 'main'" bind__visible="game.menu !== 'main'" render-order="menuItem"></a-entity>
 
@@ -314,7 +315,7 @@
           <a-entity id="header" geometry="primitive: plane; width: 5.25; height: 0.625" material="src: #headerImg; transparent: true; shader: flat" position="0 1.56 0.01" render-order="menuitem"></a-entity>
           <a-entity id="game" geometry="primitive: plane; width: 2; height: 2" material="src: #gameImg; transparent: true; shader: flat" position="-1.4 -0.2 0.02" render-order="menuitem"></a-entity>
           <a-entity class="buttons" layout="type: box; columns: 4; marginRow: -0.5" position="-1.39 1 0.02">
-            <a-entity mixin="buttonMain" text="value: |> CURRENT GAME; color: #53E033" proxy-event="as: menuWeather"></a-entity>
+            <a-entity mixin="buttonMain" text="value: Game:; color: #53E033" proxy-event="as: menuWeather"></a-entity>
           </a-entity>
           <a-entity class="buttons" layout="type: box; columns: 1; marginRow: -0.5" position="0 1 0.02">
             <a-entity mixin="buttonMain" text="value: Controls & Setup; color: #e0cb49" proxy-event="as: menuController"></a-entity>
@@ -491,15 +492,14 @@
       console.log("Run `makeWASD();` if you need to use a keyboard without a WebVR browser.");
 
       function makeProjector() {
-        // find bus object - make it located reasonable location // detach tracker binding?
         AFRAME.scenes[0].setAttribute("orbit-controls", "target: 0 0 0; initialPosition: 0 0.5 0;");
         AFRAME.scenes[0].emit('setClientMode');
       }
 
       function makeOrtho() {
         var cameraEl = document.querySelector("[camera]");
-        cameraEl.setAttribute("ortho", "width: 2.61; height 1.65; near: 0.25; far: 5.5");
-        // cameraEl.setAttribute("rotation", "-90 0 0");
+        cameraEl.setAttribute("ortho", "width: 2.61; height 1.65; near: -100; far: 100");
+        cameraEl.setAttribute("rotation", "-90 0 0");
       }
 
       function makeWASD() {
