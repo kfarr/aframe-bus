@@ -178,8 +178,9 @@
           if (this.positionDelta < Number(this.data.distance)) {
             var busEmpty = Number(this.data.busPeeps) <= 0;
             if (!busEmpty) {
-              AFRAME.scenes[0].emit('decreaseBus1Peeps');
-              AFRAME.scenes[0].emit('increaseStop2Peeps');
+              AFRAME.scenes[0].emit('decreaseBusPeeps', {target: "bus1"});
+              AFRAME.scenes[0].emit('increaseStop2Peeps', {target: "stop2"});
+              AFRAME.scenes[0].emit('increaseBus1Score', {target: "bus1"});
               AFRAME.log("1 PEEPS ALIGHTED", 'bus1');
             } else {
               AFRAME.log("Bus Empty!", 'bus1');

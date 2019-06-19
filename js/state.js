@@ -8,7 +8,7 @@ AFRAME.registerState({
     },
     layout: {
       rotationY: 270,
-      positionY: 0,
+      positionY: -0.05,
       scale: 43
     },
     gameSettings: {
@@ -39,8 +39,18 @@ AFRAME.registerState({
     menuController: function (state) {
       state.game.menu = 'controller';
     },
-    decreaseBus1Peeps: function (state, action) {
-      state.game.bus1Peeps -= 1;
+    increaseBus1Score: function (state, action) {
+      state.game.bus1Score += 1;
+    },
+    increaseBus2Score: function (state, action) {
+      state.game.bus2Score += 1;
+    },
+    decreaseBusPeeps: function (state, action) {
+      if (action.target === "bus1") {
+        state.game.bus1Peeps -= 1;
+      } else if (action.target == "bus2") {
+        state.game.bus2Peeps -= 1;
+      }
     },
     increaseBus1Peeps: function (state, action) {
       state.game.bus1Peeps += 1;
