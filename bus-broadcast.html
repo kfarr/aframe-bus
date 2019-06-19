@@ -383,6 +383,8 @@
       </a-entity>
 
       <a-entity id="game-world" bind__position="computedPositionString" bind__rotation="computedRotationString" bind__scale="computedScaleString" broadcast="send: position, rotation, scale">
+        <a-cylinder id="grass-ground" material="src:images/grass01.jpg;normalMap:images/grass01_n.jpg;metalnessMap:images/grass01_s.jpg;displacementTextureRepeat:30 30;normalTextureRepeat:30 30;repeat:30 30;metalnessTextureRepeat:30 30;color:#f6ff49;" rotation="0 0 0" position="0 -5 0" height="10" scale="1 1 1" radius="200"></a-cylinder>
+
         <a-entity environment="seed: 8;
           skyType: gradient;
           skyColor: #24b5ff;
