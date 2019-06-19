@@ -301,6 +301,9 @@
         <img id="destination-queens" src="images/Q9ALimitedOrangeLED.gif" />
         <a-asset-item id="new-bus" src="models/new-bus/GLTF/BUS.gltf"></a-asset-item>
         <a-asset-item id="vive-tracker" src="models/tracker/HTC_Vive_Tracker.gltf"></a-asset-item>
+        <a-asset-item id="vive-controller-obj" src="https://cdn.aframe.io/controllers/vive/vr_controller_vive.obj"></a-asset-item>
+        <a-asset-item id="vive-controller-mtl" src="https://cdn.aframe.io/controllers/vive/vr_controller_vive.mtl"></a-asset-item>
+
       </a-assets>
 
 
@@ -319,12 +322,9 @@
           </a-entity>
           <a-entity class="buttons" layout="type: box; columns: 1; marginRow: -0.5" position="0 1 0.02">
             <a-entity mixin="buttonMain" text="value: Controls & Setup; color: #e0cb49" proxy-event="as: menuController"></a-entity>
-<!--
-            <a-entity mixin="buttonMain" text="value: |> NOW PLAYING; color: #53E033" proxy-event="as: environmentRandomize"></a-entity>
-            <a-entity mixin="buttonMain" text="value: /_ ! _\ DIAGNOSTICS; color: #F85333"></a-entity> -->
           </a-entity>
           <a-entity class="buttons" layout="type: box; columns: 1; marginRow: -0.5" position="1.39 1 0.02">
-            <a-entity mixin="buttonMain" text="value: /!\ DIAGNOSTICS; color: #F85333"></a-entity>
+            <a-entity mixin="buttonMain" text="value: Make Projector; color: #F85333" onclick="makeProjector()"></a-entity>
           </a-entity>
         </a-entity>
 
@@ -363,8 +363,12 @@
 
       <!-- Mouse cursor so we can click on the scene with mouse or touch. -->
       <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: [raycastable]"></a-entity>
-      <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: [raycastable]"></a-entity>
-      <a-entity id="rightHand" laser-controls="hand: right" raycaster="objects: [raycastable]"></a-entity>
+      <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: [raycastable]">
+        <a-entity obj-model="obj: #vive-controller-obj; mtl: #vive-controller-mtl" scale="1 1 1" bind__visible="thisDevice.mode !== 'server'"></a-entity>
+      </a-entity>
+      <a-entity id="rightHand" laser-controls="hand: right" raycaster="objects: [raycastable]">
+        <a-entity obj-model="obj: #vive-controller-obj; mtl: #vive-controller-mtl" scale="1 1 1" bind__visible="thisDevice.mode !== 'server'"></a-entity>
+      </a-entity>
 
       <!-- Bus1 Entity including tracker controller -->
       <!-- <a-entity id="bus1-controller" tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0" position-log> -->
@@ -496,7 +500,8 @@
       function makeProjector() {
         AFRAME.scenes[0].setAttribute("orbit-controls", "target: 0 0 0; initialPosition: 0 0.5 0;");
         document.getElementsByClassName("a-enter-vr-button")[0].hidden = true;
-        AFRAME.scenes[0].emit('setClientMode');
+        // Disabled, not sure why this causes controllers to disappear :(
+        // AFRAME.scenes[0].emit('setClientMode');
       }
 
       function makeOrtho() {
@@ -516,7 +521,7 @@
         AFRAME.scenes[0].setAttribute("orbit-controls", "target: 0 0 0; initialPosition: 0 0.5 0;");
         AFRAME.scenes[0].emit('setClientMode');
       }
-      function makeVR() {
+      function makeServer() {
         // add tracked controller to above thing
         //    tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0"
         var controllerEl = document.querySelector("#bus1-controller");
@@ -525,12 +530,15 @@
         document.querySelector("#tracker-model").setAttribute("visible", "true");
         controllerEl.setAttribute("broadcast", "send: position, rotation");
 
+        document.getElementById("leftHand").setAttribute("broadcast", "send: position, rotation");
+        document.getElementById("rightHand").setAttribute("broadcast", "send: position, rotation");
+
         AFRAME.scenes[0].emit('setServerMode');
       }
 
       document.querySelector('a-scene').addEventListener('enter-vr', function () {
          console.log("ENTERED VR");
-         makeVR();
+         makeServer();
       });
     </script>
   </body>
