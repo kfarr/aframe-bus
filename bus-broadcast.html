@@ -28,9 +28,7 @@
     <script src="js/state.js"></script>
 
     <!-- Application components. -->
-    <script src="button-colors.js"></script>
-    <!-- <script src="environment-changer.js"></script>
-    <script src="weather-fetcher.js"></script> -->
+    <!-- <script src="button-colors.js"></script> -->
     <script>AFRAME.registerComponent('raycastable', {});</script>
 
     <script>
@@ -308,11 +306,11 @@
       <!-- Menu container. -->
       <a-entity id="menu" position="-1.2 0.63 0.1" visible="" rotation="0 90 0" scale="0.25 0.25 0.25">
         <a-entity id="menuBackground" mixin="slice" slice9="height: 3; width: 5.3333" render-order="menuBackground"></a-entity>
-        <a-entity id="menuBack" mixin="pageButton" scale="1.5 1.5 1.5" position="-0.8 1.15 0.02" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: menuBack" bind-toggle__raycastable="menu !== 'main'" bind__visible="menu !== 'main'" render-order="menuItem"></a-entity>
+        <a-entity id="menuBack" mixin="pageButton" scale="1.5 1.5 1.5" position="-0.8 1.15 0.02" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: menuBack" bind-toggle__raycastable="game.menu !== 'main'" bind__visible="game.menu !== 'main'" render-order="menuItem"></a-entity>
 
         <!-- Main menu. -->
-        <a-mixin id="buttonMain" mixin="button" bind-toggle__raycastable="menu === 'main'"></a-mixin>
-        <a-entity id="mainMenu" bind__visible="menu === 'main'">
+        <a-mixin id="buttonMain" mixin="button" bind-toggle__raycastable="game.menu === 'main'"></a-mixin>
+        <a-entity id="mainMenu" bind__visible="game.menu === 'main'">
           <a-entity id="header" geometry="primitive: plane; width: 5.25; height: 0.625" material="src: #headerImg; transparent: true; shader: flat" position="0 1.56 0.01" render-order="menuitem"></a-entity>
           <a-entity id="game" geometry="primitive: plane; width: 2; height: 2" material="src: #gameImg; transparent: true; shader: flat" position="-1.4 -0.2 0.02" render-order="menuitem"></a-entity>
           <a-entity class="buttons" layout="type: box; columns: 4; marginRow: -0.5" position="-1.39 1 0.02">
@@ -330,59 +328,36 @@
         </a-entity>
 
         <!-- Control Mapping menu. -->
-        <a-entity id="controllerMenu" bind__visible="menu === 'controller'">
+        <a-entity id="controllerMenu" bind__visible="game.menu === 'controller'">
           <a-entity id="controlHeader" text="value: Controls & Setup; color: #FAFAFA; width: 4; align: center" position="0 1.2 0.01" render-order="menuItem"></a-entity>
           <!-- object1 -->
           <a-entity class="row" position="0 0.7 0.01">
             <a-entity class="menuKey" text="value: Device Mode; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
-            <a-entity class="menuValue" bind__text="value: mode" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="menuValue" bind__text="value: thisDevice.mode" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
           </a-entity>
 
           <a-entity class="row" position="0 0.4 0.01">
             <a-entity class="menuKey" text="value: Bus1 Controller ID; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
-            <a-entity class="menuValue" bind__text="value: bus1ControllerId" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
-            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseBus1ControllerId" bind-toggle__raycastable="menu === 'controller'"></a-entity>
-            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseBus1ControllerId" bind-toggle__raycastable="menu === 'controller'" ></a-entity>
+            <a-entity class="menuValue" bind__text="value: controls.bus1ControllerId" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseBus1ControllerId" bind-toggle__raycastable="game.menu === 'controller'"></a-entity>
+            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseBus1ControllerId" bind-toggle__raycastable="game.menu === 'controller'" ></a-entity>
           </a-entity>
 
           <a-entity class="row" position="0 0.1 0.01">
-            <a-entity class="menuKey" text="value: Game Position Y; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
-            <a-entity class="menuValue" bind__text="value: gamePositionY" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
-            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseGamePositionY" bind-toggle__raycastable="menu === 'controller'"></a-entity>
-            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseGamePositionY" bind-toggle__raycastable="menu === 'controller'" ></a-entity>
+            <a-entity class="menuKey" text="value: Layout Position Y; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="menuValue" bind__text="value: layout.positionY" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseLayoutPositionY" bind-toggle__raycastable="game.menu === 'controller'"></a-entity>
+            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseLayoutPositionY" bind-toggle__raycastable="game.menu === 'controller'" ></a-entity>
           </a-entity>
 
           <a-entity class="row" position="0 -0.2 0.01">
-            <a-entity class="menuKey" text="value: Game Rotation Y; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
-            <a-entity class="menuValue" bind__text="value: gameRotationY" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
-            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseGameRotationY" bind-toggle__raycastable="menu === 'controller'"></a-entity>
-            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseGameRotationY" bind-toggle__raycastable="menu === 'controller'" ></a-entity>
+            <a-entity class="menuKey" text="value: Layout Rotation Y; color: #FAFAFA; width: 2.5; align: center" position="-0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="menuValue" bind__text="value: layout.rotationY" text="color: #FAFAFA; width: 2.5; align: center" position="0.5 0 0" render-order="menuItem"></a-entity>
+            <a-entity class="buttonDecrease" mixin="pageButton" position="0.25 0 0" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: decreaseLayoutRotationY" bind-toggle__raycastable="game.menu === 'controller'"></a-entity>
+            <a-entity class="buttonIncrease" mixin="pageButton" position="0.75 0 0" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: increaseLayoutRotationY" bind-toggle__raycastable="game.menu === 'controller'" ></a-entity>
           </a-entity>
 
         </a-entity>
-
-        <!-- Environment menu. -->
-        <!-- <a-entity id="environmentMenu" bind__visible="menu === 'environment'">
-          <a-entity class="buttons" layout="type: box; columns: 1; marginRow: -0.4" position="0 0.55 0.02" bind-for="for: environment; in: environmentOptions" environment-changer button-colors>
-            <template>
-              <a-entity mixin="button" text="color: #FFF; value: {{ environment }}" bind-toggle__raycastable="menu === 'environment'"></a-entity>
-            </template>
-          </a-entity>
-          <a-entity id="environmentPrev" mixin="pageButton" position="-0.8 -1.15 0.02" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: environmentPagePrev" bind-toggle__raycastable="menu === 'environment'" bind__visible="environmentPage !== 0"></a-entity>
-          <a-entity id="environmentNext" mixin="pageButton" position="0.8 -1.15 0.02" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: environmentPageNext" bind-toggle__raycastable="menu === 'environment'" bind__visible="environmentPage <= (environmentNumPages - 2)"></a-entity>
-        </a-entity> -->
-
-        <!-- Weather menu. -->
-        <!-- <a-mixin id="buttonWeather" mixin="button" bind-toggle__raycastable="menu === 'weather'"></a-mixin>
-        <a-entity id="weatherMenu" bind__visible="menu === 'weather'">
-          <a-entity id="weatherData" layout="type: box; columns: 1; marginRow: -0.4" position="0 0.1 0.02">
-            <a-entity id="weatherCity" mixin="font" text="value: 'City | '" text="align: center; width: 4"></a-entity>
-            <a-entity id="weatherName" mixin="font" text="value: 'Weather |" text="align: center; width: 4"></a-entity>
-            <a-entity id="weatherTemp" mixin="font" text="value: 'Temperature |" text="align: center; width: 4"></a-entity>
-          </a-entity>
-          <a-entity id="weatherPrev" mixin="pageButton" position="-0.8 -1.15 0.02" rotation="0 0 -90" proxy-event="event: click; to: a-scene; as: weatherPagePrev" bind-toggle__raycastable="menu === 'weather'"></a-entity>
-          <a-entity id="weatherNext" mixin="pageButton" position="0.8 -1.15 0.02" rotation="0 0 90" proxy-event="event: click; to: a-scene; as: weatherPageNext" bind-toggle__raycastable="menu === 'weather'"></a-entity>
-        </a-entity>-->
       </a-entity>
 
       <!-- Mouse cursor so we can click on the scene with mouse or touch. -->
@@ -397,19 +372,17 @@
         <a-entity id="tracker-model" gltf-model="#vive-tracker" visible="false" rotation="0 0 0" scale="0.001 0.001 0.001"></a-entity>
         <!-- <a-entity id="bus1" position-log wasd-controls="acceleration: 260;" position="0 0 10"> -->
         <a-entity id="bus1" position="0 -0.065 0.045" bind__scale="computedScaleString">
-          <a-text class="busPeepsLabel" look-at="[camera]" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
+          <a-text class="busPeepsLabel" look-at="[camera]" position="0 6 3" rotation="0 270 0" scale="15 15 15" bind__value="game.bus1Peeps" color="cyan" font="aileronsemibold"></a-text>
           <a-ring class="bus-door-marker" color="cyan" position="2 -1.25 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
-          board="target: bus-stop-1-marker" bind__board="busPeeps: bus1Peeps; stopPeeps: stop1Peeps; capacity: bus1Capacity; distance: computedDistance"
-          alight="target: bus-stop-2-marker" bind__alight="busPeeps: bus1Peeps; distance: computedDistance"></a-ring>
+          board="target: bus-stop-1-marker" bind__board="busPeeps: game.bus1Peeps; stopPeeps: game.stop1Peeps; capacity: game.bus1Capacity; distance: computedDistance"
+          alight="target: bus-stop-2-marker" bind__alight="busPeeps: game.bus1Peeps; distance: computedDistance"></a-ring>
           <a-entity class="log" look-at="[camera]" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
           <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
           <a-entity class="bus-model" template="src: #bustemplate" position="0 0 0" rotation="0 180 0" ></a-entity>
         </a-entity>
       </a-entity>
 
-
-
-      <a-entity bind__position="computedPositionString" bind__rotation="computedRotationString" id="game-world" bind__scale="computedScaleString">
+      <a-entity id="game-world" bind__position="computedPositionString" bind__rotation="computedRotationString" bind__scale="computedScaleString" broadcast="send: position, rotation, scale">
         <a-entity environment="seed: 8;
           skyType: gradient;
           skyColor: #24b5ff;
@@ -431,11 +404,6 @@
           gridColor: #c5a543;
           shadow: false" position="0 -0.1 0" scale="8 8 8"></a-entity>
 
-        <!-- Old bus graveyard -->
-        <!-- <a-entity id="bus" template="src: #bustemplate" data-topurl="bus-top-4278" position="0 1.5 0" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
-        <!-- <a-entity id="bus3" template="src: #bustemplate" data-topurl="bus-top-3959" position="0 1.5 -40" rotation="0 180 0" forward resetlt="position:0 1.5 50;trigger:-50"></a-entity> -->
-        <!-- <a-entity id="bus4" template="src: #bustemplate" position="-6.3 1.5 40" rotation="0 0 0" forward resetgt="position:-6.3 1.5 -50;trigger:50"></a-entity> -->
-
         <a-entity class="model-streetlight" gltf-model="models/streetlightmodel.gltf" position="-3.6 -1.9 8.2" rotation="0 180 0" scale="1.5 1.5 1.5"></a-entity>
         <a-entity class="light-streetlight" light="type:spot;angle:57.85;penumbra:0.19" position="-3 4.5 7" rotation="-90 0 0"></a-entity>
 
@@ -449,22 +417,18 @@
         <a-entity meshline="lineWidth: 2; path: -2 -1 0, 0 -2 0, 2 -1; color: #E20049" position="0 10 0"></a-entity>
 
         <a-entity id="bus-stop-1" class="bus-stop" position="4.5 0 25">
-          <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
+          <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="game.stop1Peeps" color="yellow" font="aileronsemibold"></a-text>
           <a-entity id="boardingPeep1" visible="true" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 270 0"
             animation__board="property: object3D.position.x; easing: linear; from: 0; to: -4; dur: 900; startEvents: startBoarding"
             animation__flee="property: object3D.position.x; easing: linear; from: -4; to: 999; dur: 1; startEvents: animationcomplete__board"
           ></a-entity>
-          <a-entity id="peepsParent1" draw-stop-peeps="boardingPeepId: boardingPeep1" bind__draw-stop-peeps="stopPeeps: stop1Peeps" position="0 0 -1">
-            <!-- PEEPS GO HERE -->
-            <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
-            <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
-            <a-entity id="tom" mixin="peep3 bounce" position="0 0.2 1" rotation="0 270 0"></a-entity> -->
+          <a-entity id="peepsParent1" draw-stop-peeps="boardingPeepId: boardingPeep1" bind__draw-stop-peeps="stopPeeps: game.stop1Peeps" position="0 0 -1">
           </a-entity>
           <a-entity class="bus-stop-sidewalk" geometry="primitive:plane;height:5;width:15" position="1.5 0.26 3" rotation="270 0 90" material="src:images/cobblestone-sidewalk.jpg;repeat:9 3;color:#f4fff7;metalness:1;roughness:0.84"></a-entity>
           <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.02 3" scale="6 8 6"></a-image>
           <a-entity class="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
           <a-entity class="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat"></a-entity>
-          <a-entity id="bus-stop-1-marker" bind__visible="stop1Peeps !== 0" position="-2.536 0.5 -0.932">
+          <a-entity id="bus-stop-1-marker" bind__visible="game.stop1Peeps !== 0" position="-2.536 0.5 -0.932">
             <a-ring class="marker-pulsating" color="yellow"
             animation__1="property: radius-inner; from: 2; to: 7; dir: alternate; dur: 1000; loop: true"
             animation__2="property: radius-outer; from: 2.2; to: 9; dir: alternate; dur: 1000; loop: true"
@@ -474,9 +438,9 @@
         </a-entity>
 
         <a-entity id="bus-stop-2" class="bus-stop" position="4.5 0 -30">
-          <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="stop2Peeps" color="yellow" font="aileronsemibold"></a-text>
+          <a-text class="stopPeepsLabel" look-at="[camera]" position="2 6 0" rotation="0 270 0" scale="15 15 15" bind__value="game.stop2Peeps" color="yellow" font="aileronsemibold"></a-text>
           <a-entity id="alightingPeep2" visible="true" class="peeps" mixin="peep1 bounce" position="0 0.2 -1" rotation="0 90 0"></a-entity>
-          <a-entity id="peepsParent2" draw-stop-peeps="boardingPeepId: alightingPeep2" bind__draw-stop-peeps="stopPeeps: stop2Peeps" position="0 0 -1">
+          <a-entity id="peepsParent2" draw-stop-peeps="boardingPeepId: alightingPeep2" bind__draw-stop-peeps="stopPeeps: game.stop2Peeps" position="0 0 -1">
             <!-- PEEPS GO HERE -->
             <!-- <a-entity id="bob" mixin="peep1 bounce" position="0 0.2 0" rotation="0 270 0"></a-entity>
             <a-entity id="roberta" mixin="peep2 bounce" position="0 0.2 -1" rotation="0 270 0"></a-entity>
@@ -486,7 +450,7 @@
           <a-image class="bus-stop-stencil" src="url(images/stop-bus.png)" material="alphaTest:0;opacity:0.5;" rotation="270 270 90" position="-4.7 0.02 3" scale="6 8 6"></a-image>
           <a-entity class="bus-stop-shelter" gltf-model="models/ccFO2EGGIq9-bus-stop/bust stop 1.gltf" position="1 0.25 0" rotation="-90 0 0" scale="0.001 -0.001 0.001"></a-entity>
           <a-entity class="bus-stop-advert" geometry="primitive:plane;height:2.5;width:2" position="0.24 1.53 2.07" material="src:images/carrot-advert-lighting.jpg;shader:flat"></a-entity>
-          <a-entity id="bus-stop-2-marker" bind__visible="bus1Peeps > 0" position="-2.536 0.5 -0.932">
+          <a-entity id="bus-stop-2-marker" bind__visible="game.bus1Peeps > 0" position="-2.536 0.5 -0.932">
             <a-ring class="marker-pulsating" color="yellow"
             animation__1="property: radius-inner; from: 2; to: 7; dir: alternate; dur: 1000; loop: true"
             animation__2="property: radius-outer; from: 2.2; to: 9; dir: alternate; dur: 1000; loop: true"
@@ -543,7 +507,7 @@
         //    tracked-controls="idPrefix: OpenVR; controller: 2; orientationOffset:-90 180 0"
         var controllerEl = document.querySelector("#bus1-controller");
         controllerEl.setAttribute("tracked-controls", "idPrefix: OpenVR; orientationOffset:-90 0 0");
-        controllerEl.setAttribute("bind__tracked-controls", "controller: bus1ControllerId");
+        controllerEl.setAttribute("bind__tracked-controls", "controller: controls.bus1ControllerId");
         document.querySelector("#tracker-model").setAttribute("visible", "true");
         controllerEl.setAttribute("broadcast", "send: position, rotation");
 

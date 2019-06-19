@@ -2,83 +2,89 @@
 AFRAME.registerState({
   // Initial state of our application. We have the current environment and the active menu.
   initialState: {
-    scale: 43,
-    detectionRadius: 2,
-    bus1Peeps: 0,
-    bus1Capacity: 10,
-    stop1Peeps: 10,
-    stop2Peeps: 0,
-    bus1ControllerId: 2,
-    gameRotationY: 0,
-    gamePositionY: 0,
-    worldY: 0,
-    menu: 'main',
-    mode: 'client',
-    weatherData: {
-      name: '',
-      temperature: 0,
-      weather: [{
-        main: '',
-        icon: ''
-      }]
+    controls: {
+      bus1ControllerId: 2,
     },
-    weatherResults: []
+    layout: {
+      rotationY: 270,
+      positionY: 0,
+      scale: 43
+    },
+    game: {
+      detectionRadius: 2,
+      bus1Peeps: 0,
+      bus1Capacity: 10,
+      stop1Peeps: 10,
+      stop2Peeps: 0,
+      menu: 'main'
+    },
+    thisDevice: {
+      mode: 'client',
+    },
+    projector1: {
+      position: "0 1 0",
+      rotation: "0 0 0",
+      width: 2.61,
+      height: 1.65,
+      near: 0.25,
+      far: 2
+    }
   },
 
   // State changes are done via events and are handled here.
   handlers: {
     menuBack: function (state) {
-     state.menu = 'main';
+     state.game.menu = 'main';
     },
     menuController: function (state) {
-      state.menu = 'controller';
+      state.game.menu = 'controller';
     },
     decreaseBus1Peeps: function (state, action) {
-      state.bus1Peeps -= 1;
+      state.game.bus1Peeps -= 1;
     },
     increaseBus1Peeps: function (state, action) {
-      state.bus1Peeps += 1;
+      state.game.bus1Peeps += 1;
     },
     decreaseStop1Peeps: function (state, action) {
-      state.stop1Peeps -= 1;
+      state.game.stop1Peeps -= 1;
     },
     increaseStop1Peeps: function (state, action) {
-      state.stop1Peeps += 1;
+      state.game.stop1Peeps += 1;
     },
     increaseStop2Peeps: function (state, action) {
-      state.stop2Peeps += 1;
+      state.game.stop2Peeps += 1;
     },
     increaseBus1ControllerId: function (state, action) {
-      state.bus1ControllerId += 1;
+      state.controls.bus1ControllerId += 1;
     },
     decreaseBus1ControllerId: function (state, action) {
-      state.bus1ControllerId -= 1;
+      state.controls.bus1ControllerId -= 1;
     },
-    increaseGameRotationY: function (state, action) {
-      state.gameRotationY += 1;
+    increaseLayoutRotationY: function (state, action) {
+      state.layout.RotationY += 1;
     },
-    decreaseGameRotationY: function (state, action) {
-      state.gameRotationY -= 1;
+    decreaseLayoutRotationY: function (state, action) {
+      state.layout.rotationY -= 1;
     },
-    increaseGamePositionY: function (state, action) {
-      state.gamePositionY += 0.001;
+    increaseLayoutPositionY: function (state, action) {
+      state.layout.positionY += 0.001;
     },
-    decreaseGamePositionY: function (state, action) {
-      state.gamePositionY -= 0.001;
+    decreaseLayoutPositionY: function (state, action) {
+      state.layout.positionY -= 0.001;
     },
     setServerMode: function (state, action) {
-      state.mode = 'server';
+      state.thisDevice.mode = 'server';
     },
     setClientMode: function (state, action) {
-      state.mode = 'server';
+      state.thisDevice.mode = 'server';
     },
   },
   computeState: function (newState, payload) {
     // effective distance (radius) to monitor for door zone collision based on scale of scene
-    newState.computedDistance = Number(newState.detectionRadius) / Number(newState.scale);
-    newState.computedScaleString = (1 / Number(newState.scale) + " ").repeat(3);
-    newState.computedPositionString = "0 " + Number(newState.gamePositionY) + " 0";
-    newState.computedRotationString = "0 " + Number(newState.gameRotationY) + " 0";
+    newState.computedDistance = Number(newState.game.detectionRadius) / Number(newState.layout.scale);
+    newState.computedScaleString = (1 / Number(newState.layout.scale) + " ").repeat(3);
+    newState.computedPositionString = "0 " + Number(newState.layout.positionY) + " 0";
+    newState.computedRotationString = "0 " + Number(newState.layout.rotationY) + " 0";
     // console.log(newState.computedPositionString);
   }
 });

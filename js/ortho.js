@@ -3,8 +3,8 @@
 
 AFRAME.registerComponent('ortho', {
   schema: {
-    width: {type: 'number', default: 1.47},
-    height: {type: 'number', default: 0.91},
+    width: {type: 'number', default: 1.6},
+    height: {type: 'number', default: 0.9},
     near: {type: 'number', default: 0.25},
     far: {type: 'number', default: 2.0}
   },
