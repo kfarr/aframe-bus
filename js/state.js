@@ -4,18 +4,26 @@ AFRAME.registerState({
   initialState: {
     controls: {
       bus1ControllerId: 2,
+      bus2ControllerId: 3
     },
     layout: {
       rotationY: 270,
       positionY: 0,
       scale: 43
     },
-    game: {
+    gameSettings: {
       detectionRadius: 2,
+      busCapacity: 5,
+      bus1Color: 'red',
+      bus2Color: 'blue'
+    },
+    game: {
       bus1Peeps: 0,
-      bus1Capacity: 5,
+      bus2Peeps: 0,
       stop1Peeps: 10,
       stop2Peeps: 0,
+      bus1Score: 0,
+      bus2Score: 0,
       menu: 'main'
     },
     thisDevice: {
@@ -73,10 +81,12 @@ AFRAME.registerState({
   },
   computeState: function (newState, payload) {
     // effective distance (radius) to monitor for door zone collision based on scale of scene
-    newState.computedDistance = Number(newState.game.detectionRadius) / Number(newState.layout.scale);
+    newState.computedDistance = Number(newState.gameSettings.detectionRadius) / Number(newState.layout.scale);
     newState.computedScaleString = (1 / Number(newState.layout.scale) + " ").repeat(3);
     newState.computedPositionString = "0 " + Number(newState.layout.positionY) + " 0";
     newState.computedRotationString = "0 " + Number(newState.layout.rotationY) + " 0";
+    newState.computedScoreString = "";
+    newState.computedCapacityString = "";
     // console.log(newState.computedPositionString);
   }
 });
