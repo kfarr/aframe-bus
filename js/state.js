@@ -1,38 +1,45 @@
+
+const initialState = {
+  controls: {
+    bus1ControllerId: 2,
+    bus2ControllerId: 3
+  },
+  layout: {
+    rotationY: 270,
+    positionY: -0.05,
+    scale: 43
+  },
+  gameSettings: {
+    detectionRadius: 2,
+    busCapacity: 5,
+    bus1Color: 'red',
+    bus2Color: 'blue'
+  },
+  game: {
+    bus1Peeps: 0,
+    bus2Peeps: 0,
+    stop1Peeps: 10,
+    stop2Peeps: 0,
+    bus1Score: 0,
+    bus2Score: 0,
+    menu: 'main'
+  },
+  thisDevice: {
+    mode: 'client'
+  }
+}
+
+
 // aframe-state-component definition.
 AFRAME.registerState({
   // Initial state of our application. We have the current environment and the active menu.
-  initialState: {
-    controls: {
-      bus1ControllerId: 2,
-      bus2ControllerId: 3
-    },
-    layout: {
-      rotationY: 270,
-      positionY: -0.05,
-      scale: 43
-    },
-    gameSettings: {
-      detectionRadius: 2,
-      busCapacity: 5,
-      bus1Color: 'red',
-      bus2Color: 'blue'
-    },
-    game: {
-      bus1Peeps: 0,
-      bus2Peeps: 0,
-      stop1Peeps: 10,
-      stop2Peeps: 0,
-      bus1Score: 0,
-      bus2Score: 0,
-      menu: 'main'
-    },
-    thisDevice: {
-      mode: 'client'
-    }
-  },
+  initialState: initialState,
 
   // State changes are done via events and are handled here.
   handlers: {
+    resetGameState: function (state) {
+      Object.assign(state.game, initialState.game);
+    },
     menuBack: function (state) {
      state.game.menu = 'main';
     },

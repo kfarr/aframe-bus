@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Magic Matta - Peeps on the Bus</title>
-    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <meta name="description" content="Magic Matta - Peeps on the Bus">
     <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mayognaise/aframe-gif-shader/dist/aframe-gif-shader.min.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@2.0.0/dist/aframe-environment-component.min.js"></script>
@@ -242,7 +242,7 @@
 
   </head>
   <body>
-    <a-scene loading-screen="backgroundColor: #da95f1" log="console: false" stats background="color: #ECECEC" broadcast="url: http://10.10.7.87:12000">
+    <a-scene loading-screen="backgroundColor: #da95f1" log="console: false" stats background="color: #ECECEC" broadcast="url: http://192.168.43.107:12000; interval: 10">
       <!-- note: camera is placed here against best practices because of https://github.com/aframevr/aframe/issues/3921 -->
       <a-entity camera look-controls position="0 1 0"></a-entity>
 
@@ -319,7 +319,7 @@
           <a-entity id="header" geometry="primitive: plane; width: 5.25; height: 0.625" material="src: #headerImg; transparent: true; shader: flat" position="0 1.56 0.01" render-order="menuitem"></a-entity>
           <a-entity id="game" geometry="primitive: plane; width: 2; height: 2" material="src: #gameImg; transparent: true; shader: flat" position="-1.4 -0.2 0.02" render-order="menuitem"></a-entity>
           <a-entity class="buttons" layout="type: box; columns: 4; marginRow: -0.5" position="-1.39 1 0.02">
-            <a-entity mixin="buttonMain" text="value: Game:; color: #53E033" proxy-event="as: menuWeather"></a-entity>
+            <a-entity mixin="buttonMain" text="value: Game Reset; color: #53E033" proxy-event="as: resetGameState"></a-entity>
           </a-entity>
           <a-entity class="buttons" layout="type: box; columns: 1; marginRow: -0.5" position="0 1 0.02">
             <a-entity mixin="buttonMain" text="value: Controls & Setup; color: #e0cb49" proxy-event="as: menuController"></a-entity>
