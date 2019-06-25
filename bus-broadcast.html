@@ -31,6 +31,27 @@
     <!-- <script src="button-colors.js"></script> -->
     <script>AFRAME.registerComponent('raycastable', {});</script>
 
+    <style>
+      .menu-overlay {
+         z-index: 99999;
+         position: fixed;
+         top: 20px;
+         right: 20px;
+         box-sizing: border-box;
+         padding: 1.5em;
+         width: 60px;
+         height: 60px;
+         padding-bottom: 0px;
+         background: rgba(0, 0, 0, 0.5) url(./assets/images/hamburger-white.png) center no-repeat;
+         background-size: 40px 40px;
+         font-family: Source Sans Pro, Helvetica Neue, Helvetica, Arial, sans-serif;
+      }
+      .menu-overlay:hover {
+        background: rgba(0, 0, 0, 0.2) url(./assets/images/hamburger-white.png) center no-repeat;
+        background-size: 40px 40px;
+      }
+    </style>
+
     <script>
 
       // handle visual display of bus stop peeps based on number of peeps
@@ -242,7 +263,8 @@
 
   </head>
   <body>
-    <a-scene loading-screen="backgroundColor: #da95f1" log="console: false" stats background="color: #ECECEC" broadcast="url: http://192.168.43.107:12000; interval: 10">
+
+    <a-scene loading-screen="backgroundColor: #da95f1" log="console: false" stats background="color: #ECECEC" broadcast="url: http://192.168.1.3:12000; interval: 10">
       <!-- note: camera is placed here against best practices because of https://github.com/aframevr/aframe/issues/3921 -->
       <a-entity camera look-controls position="0 1 0"></a-entity>
 
@@ -410,6 +432,9 @@
           <a-ring class="bus-door-marker" color="cyan" position="2 -1.25 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"
           board="target: bus-stop-1-marker" bind__board="busPeeps: game.bus1Peeps; stopPeeps: game.stop1Peeps; capacity: gameSettings.busCapacity; distance: computedDistance"
           alight="target: bus-stop-2-marker" bind__alight="busPeeps: game.bus1Peeps; distance: computedDistance"></a-ring>
+          <a-ring class="bus-door-marker" color="cyan" position="2 -0.75 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"></a-ring>
+          <a-ring class="bus-door-marker" color="cyan" position="2 -0.25 -5.315" radius-inner="0.4" radius-outer="0.5" rotation="-90 0 0" material="shader:flat"></a-ring>
+
           <a-entity class="log" look-at="[camera]" log="max: 10;" scale="6 6 6" geometry="primitive: plane;" material="color: #111; shader: flat" text="color: lightgreen" position="-6 3 0"></a-entity>
           <!-- <a-entity gltf-model="#new-bus" rotation="0 270 0" scale="0.4 0.4 0.4"></a-entity> -->
           <a-entity class="bus-model" template="src: #bustemplate" position="0 0 0" rotation="0 180 0" ></a-entity>
@@ -524,6 +549,8 @@
         <a-entity id="ambient" light="color:#BBB;type:ambient;intensity:0.1"></a-entity>
       </a-entity> <!-- closing game-world entity -->
     </a-scene>
+    <a onclick="AFRAME.scenes[0].emit('resetGameState');"><div class="menu-overlay btn btn-outline-secondary"></div></a>
+
     <script>
       console.log("Run `makeWASD();` if you need to use a keyboard without a WebVR browser.");
 
