@@ -1,6 +1,20 @@
 # aframe-bus
 This experiment originally started to make a city "paper" bus in XR form inspired by #Codevember 2018. It eventually morphed into a more complicated project.
 
+## Quick demo
+
+<a href="https://kfarr.github.io/aframe-bus/codevember-15-fire.html">Fire! Particles and lights!<br/><img src="https://github.com/kfarr/aframe-bus/blob/master/images/bus-preview.jpg" width=300></a>
+
+## Links to Codevember 2018 static pages
+* https://kfarr.github.io/aframe-bus/index.html
+* https://kfarr.github.io/aframe-bus/index-night.html
+* https://kfarr.github.io/aframe-bus/codevember-02-time.html
+* https://kfarr.github.io/aframe-bus/codevember-03-carrot.html
+* https://kfarr.github.io/aframe-bus/codevember-04-sky.html
+* https://kfarr.github.io/aframe-bus/codevember-07-sea.html
+* https://kfarr.github.io/aframe-bus/codevember-09-green.html
+* https://kfarr.github.io/aframe-bus/codevember-15-fire.html
+
 ## Running bus tracker broadcaster app in exokit:
 Tested on Windows 10 PC with HTC Vive and Trackers. It's recommended that you run SteamVR Room Setup and set the play zone to match exactly the dimensions of your projector screen area.
 0) Clone this repo
@@ -12,16 +26,6 @@ Tested on Windows 10 PC with HTC Vive and Trackers. It's recommended that you ru
 4) Open another command shell in your exokit directory (after building exokit from repo HASH value e5d38a6ca5f2c5cc03f79e0b5ec8d0fcad6c142a) then run:
 `node . -x webvr http://localhost:8080/bus-broadcast.html`
 5) On another machine attached to a projector pointed at the floor, use the IP address noted in (1) and open [localip]:8080/bus-broadcast.html in any browser. Open the console and run `makeProjector();` Do not enter VR mode, instead use browser Fullscreen to stretch 3d view to full edges. Use the mouse to click, drag and "double drag" (using middle mouse button or two fingers touchpad) to adjust the projector's camera position while using the VR headset and tracked object to manually calibrate the projector.
-
-## Quick links to Codevember 2018 static pages
-* https://kfarr.github.io/aframe-bus/index.html
-* https://kfarr.github.io/aframe-bus/index-night.html
-* https://kfarr.github.io/aframe-bus/codevember-02-time.html
-* https://kfarr.github.io/aframe-bus/codevember-03-carrot.html
-* https://kfarr.github.io/aframe-bus/codevember-04-sky.html
-* https://kfarr.github.io/aframe-bus/codevember-07-sea.html
-* https://kfarr.github.io/aframe-bus/codevember-09-green.html
-* https://kfarr.github.io/aframe-bus/codevember-15-fire.html
 
 ## About the Bus
 1:43 scale NYC MTA Bus Toy:
